@@ -1,5 +1,6 @@
 package com.knu.salmon.api.domain.food.entity;
 
+import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,8 +12,7 @@ import java.time.LocalDateTime;
 @Entity(name = "foods")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Food {
-
+public class Food extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
