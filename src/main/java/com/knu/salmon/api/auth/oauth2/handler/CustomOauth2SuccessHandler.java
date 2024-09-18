@@ -5,6 +5,7 @@ import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.entity.type.Role;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
+import com.knu.salmon.api.domain.member.service.AuthService;
 import com.knu.salmon.api.domain.member.service.MemberService;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
@@ -28,7 +29,7 @@ import java.util.Collection;
 public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-    private final MemberService memberService;
+    private final AuthService authService;
     private final MemberRepository memberRepository;
 
     @Override
@@ -41,7 +42,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         String accessToken = jwtService.createAccessToken(email, role);
         String refreshToken =  jwtService.createRefreshToken();
-        String savedRefresh = memberService.saveRefresh(email, refreshToken);
+        String savedRefresh = authService.saveRefresh(email, refreshToken);
 
         response.setHeader("Authorization", accessToken);
         response.addCookie(jwtService.createCookie("Authorization-refresh", refreshToken));
