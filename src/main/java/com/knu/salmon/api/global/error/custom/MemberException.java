@@ -8,7 +8,7 @@ public class MemberException extends RuntimeException{
 
     private MemberErrorCode memberErrorCode;
 
-    MemberException(MemberErrorCode memberErrorCode) {
+    public MemberException(MemberErrorCode memberErrorCode) {
         this.memberErrorCode = memberErrorCode;
     }
 }

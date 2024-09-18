@@ -1,12 +1,12 @@
 package com.knu.salmon.api.global.error.errorcode;
 
-import com.knu.salmon.api.domain.member.entity.TokenStatus;
+import com.knu.salmon.api.domain.member.entity.type.TokenStatus;
 import com.knu.salmon.api.global.error.DataErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import static com.knu.salmon.api.domain.member.entity.TokenStatus.*;
+import static com.knu.salmon.api.domain.member.entity.type.TokenStatus.*;
 
 @Getter
 @RequiredArgsConstructor

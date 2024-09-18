@@ -1,5 +1,8 @@
 package com.knu.salmon.api.auth.jwt.service;
+import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.global.error.custom.JwtTokenException;
+import com.knu.salmon.api.global.error.custom.MemberException;
+import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -118,9 +121,9 @@ public class JwtService {
         return cookie;
     }
 
-    public String getAccessTokenFromRefresh(String refreshToken){
+/*    public String getAccessTokenFromRefresh(String refreshToken){
         if(refreshToken == null){
-            throw new CustomException(ErrorCode.NO_EXIST_DIARY_MEMBER_EXCEPTION);
+            throw new MemberException(MemberErrorCode.NO_MATCHING_MEMBER_EXCEPTION);
         }
 
         validateToken(refreshToken);
@@ -130,7 +133,7 @@ public class JwtService {
         String accessToken = createAccessToken(member.getEmail(), member.getRole().name());
 
         return accessToken;
-    }
+    }*/
 
     private static boolean isRefreshTokenExpired(ExpiredJwtException e) {
         return e.getClaims().get("token_type").equals("refresh_token");

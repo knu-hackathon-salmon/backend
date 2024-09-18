@@ -1,5 +1,15 @@
 package com.knu.salmon.api.auth.jwt.filter;
 
+import com.knu.salmon.api.auth.jwt.service.JwtService;
+import com.knu.salmon.api.domain.member.entity.Member;
+import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.member.entity.type.Role;
+import com.knu.salmon.api.domain.member.repository.MemberRepository;
+import com.knu.salmon.api.domain.member.service.MemberService;
+import com.knu.salmon.api.global.error.custom.JwtTokenException;
+import com.knu.salmon.api.global.error.custom.MemberException;
+import com.knu.salmon.api.global.error.errorcode.JwtTokenErrorCode;
+import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,13 +32,14 @@ import java.util.Arrays;
     public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         private final MemberService memberService;
+        private final MemberRepository memberRepository;
         private final JwtService jwtService;
 
         @Override
         protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
             // filter를 거치고 싶지 않은 path를 여기서 관리함
             String[] excludePathLists = {"/favicon.ico", "/swagger-ui/index.html", "/api/jwt/access-token"};
-            String[] excludePathStartsWithLists = {"/login", "/oauth2", "/api/member/check", "/v3", "/swagger-ui", "/ws", "/api/oauth2"};
+            String[] excludePathStartsWithLists = {"/login", "/oauth2",  "/v3", "/swagger-ui", "/ws", "/api/oauth2"};
 
             String path = request.getRequestURI();
 
@@ -62,9 +73,8 @@ import java.util.Arrays;
                 if (jwtService.getRole(accesstoken).equals(Role.ROLE_GOOGLE_USER.name())
                         || jwtService.getRole(accesstoken).equals(Role.ROLE_KAKAO_USER.name())) {
                     String email = jwtService.getEmail(accesstoken);
-                    log.info("email : {}", email);
-                    member = memberService.findByEmail(email);
-                    log.info("member email : {}", member.getEmail());
+                    member = memberRepository.findByEmail(email)
+                            .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
                 }
 
                 // 해당 멤버를 authentication(인증) 해줌
