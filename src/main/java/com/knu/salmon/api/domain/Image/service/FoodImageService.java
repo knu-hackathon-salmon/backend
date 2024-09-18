@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -79,4 +81,13 @@ public class FoodImageService {
     public String createImageUrl(String uniqueFileName) {
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, uniqueFileName);
     }
+
+
+    public List<FoodImage> getImageList(Optional<Food> food)
+    {
+        List<FoodImage> images = foodImageRepository.findByFood(food);
+
+        return images;
+    }
+
 }
