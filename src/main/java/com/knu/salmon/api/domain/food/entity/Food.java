@@ -1,12 +1,15 @@
 package com.knu.salmon.api.domain.food.entity;
 
 import com.knu.salmon.api.domain.Image.entity.FoodImage;
+import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
+import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.sql.Update;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,6 +49,9 @@ public class Food extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<FoodImage> images = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
     public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory){
@@ -56,6 +62,17 @@ public class Food extends BaseEntity {
         this.price = price;
         this.content = content;
         this.foodCategory = foodCategory;
+    }
+
+    public void updateFood(UpdateFoodDto updateFoodDto)
+    {
+        this.title = updateFoodDto.getNewTitle();
+        this.name = updateFoodDto.getNewName();
+        this.stock = updateFoodDto.getNewStock();
+        this.expiration = updateFoodDto.getNewExpiration();
+        this.price = updateFoodDto.getNewPrice();
+        this.content = updateFoodDto.getNewContent();
+        this.foodCategory = updateFoodDto.getNewFoodCategory();
     }
 
 

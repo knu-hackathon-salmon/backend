@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.service.FoodService;
@@ -46,4 +47,29 @@ public class ApiFoodController implements SwaggerFoodApi{
         ApiDataResponse<List<FoodOverviewResponseDto>> foodOverview = foodService.getFoodOverview();
         return ResponseEntity.status(foodOverview.getCode()).body(foodOverview);
     }
+
+    @PutMapping("{foodId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiBasicResponse> updateFood(
+            @PathVariable("foodId") Long foodId,
+            @RequestBody UpdateFoodDto updateFoodDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        ApiBasicResponse response = foodService.updateFood(updateFoodDto, principalDetails, foodId);
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @DeleteMapping("{foodId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiBasicResponse> deleteFood(
+            @PathVariable("foodId") Long foodId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        ApiBasicResponse response = foodService.deleteFood(principalDetails, foodId);
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+
 }

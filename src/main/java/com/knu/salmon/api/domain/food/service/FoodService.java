@@ -4,6 +4,7 @@ import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.Image.repository.FoodImageRepository;
 import com.knu.salmon.api.domain.Image.service.FoodImageService;
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.entity.Food;
@@ -18,6 +19,7 @@ import com.knu.salmon.api.global.error.errorcode.custom.FoodErrorCode;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,6 +127,28 @@ public class FoodService {
                 .build();
     }
 
+    public ApiBasicResponse updateFood(UpdateFoodDto updateFoodDto, PrincipalDetails principalDetails, Long foodId){
+        Member member = memberRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
+
+        if(!food.getMember().equals(member)){
+            throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
+        }
+
+        food.updateFood(updateFoodDto);
+
+        foodRepository.save(food);
+
+        return ApiBasicResponse.builder()
+                .status(true)
+                .code(200)
+                .message("음식 정보업데이트 성공! " )
+                .build();
+    }
+
     public ApiBasicResponse deleteFood(PrincipalDetails principalDetails, Long foodId) {
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
@@ -132,16 +156,16 @@ public class FoodService {
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
 
-//        if(!food.getM().equals(member)){
-//            throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
-//        }
+        if(!food.getMember().equals(member)){
+            throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
+        }
 
         foodRepository.delete(food);
 
         return ApiBasicResponse.builder()
                 .status(true)
                 .code(200)
-                .message("다이어리 삭제 성공")
+                .message("음식 삭제 성공")
                 .build();
     }
 

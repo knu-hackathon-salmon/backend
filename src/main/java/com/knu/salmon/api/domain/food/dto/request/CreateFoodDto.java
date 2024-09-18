@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CreateFoodDto {
+    private String title;
+
     private String name;
 
     private Long stock;

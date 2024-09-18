@@ -1,22 +1,18 @@
 package com.knu.salmon.api.domain.member.entity;
 
 import com.knu.salmon.api.domain.customer.entity.Customer;
+import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.type.MemberType;
 import com.knu.salmon.api.domain.member.entity.type.Role;
 import com.knu.salmon.api.domain.seller.entity.Shop;
 import com.knu.salmon.api.global.spec.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity(name = "members")
 @Getter
@@ -42,6 +38,9 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "member")
     private Customer customer;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Food> food;
 
     @Builder
     public Member(String email, Role role, String refreshToken, MemberType memberType) {

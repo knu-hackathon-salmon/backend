@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
@@ -42,5 +43,27 @@ public interface SwaggerFoodApi {
     })
     @Operation(summary = "홈 화면에 음식 리스트 조회", description = "홈 화면에 음식 리스트를 조회합니다")
     ResponseEntity<ApiDataResponse<List<FoodOverviewResponseDto>>> getFoodOverView();
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "음식 수정 성공!"),
+                    @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+            }
+    )
+    @Operation(summary = "음식 수정", description = "음식을 수정합니다")
+    ResponseEntity<ApiBasicResponse> updateFood(
+            @Parameter(description = "음식 id") Long foodId,
+            @Parameter(description = "음식 업데이트 dto") UpdateFoodDto updateFoodDto,
+            @Parameter(description = "Bearer ey...") PrincipalDetails principalDetails);
+
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "음식 삭제 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "음식 삭제 로직", description = "음식을 삭제합니다.")
+    ResponseEntity<ApiBasicResponse> deleteFood(
+            @Parameter(description = "음식 아이디", required = true) Long foodId,
+            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
 }
 
