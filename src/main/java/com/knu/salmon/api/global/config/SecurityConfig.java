@@ -2,6 +2,8 @@ package com.knu.salmon.api.global.config;
 
 import com.knu.salmon.api.auth.jwt.filter.JwtAuthorizationFilter;
 import com.knu.salmon.api.auth.jwt.filter.JwtExceptionFilter;
+import com.knu.salmon.api.auth.oauth2.handler.CustomOauth2SuccessHandler;
+import com.knu.salmon.api.auth.oauth2.service.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,8 @@ public class SecurityConfig {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final CustomOauth2UserService customOauth2UserService;
+    private final CustomOauth2SuccessHandler customOauth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,6 +48,9 @@ public class SecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                                 .anyRequest().authenticated()
                         )
+                        .oauth2Login((oauth2) -> oauth2
+                                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOauth2UserService))
+                                .successHandler(customOauth2SuccessHandler))
                         .addFilterAfter(jwtAuthorizationFilter, LogoutFilter.class)
                         .addFilterBefore(jwtExceptionFilter, JwtAuthorizationFilter.class)
                         .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
