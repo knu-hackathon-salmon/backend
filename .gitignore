@@ -33,7 +33,12 @@ out/
 /nbdist/
 /.nb-gradle/
 
+# Ignore .DS_Store files
+.DS_Store
+
 ### VS Code ###
 .vscode/
 
-.DS_Store
+src/main/resources/application-dev.yml
+/src/main/resources/sunny-wavelet-429609-t9-5d820b98637e.json
+/sunny-wavelet-429609-t9-5d820b98637e.json
