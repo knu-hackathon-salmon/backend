@@ -46,7 +46,7 @@ public class Food extends BaseEntity {
     @Column(name = "food_category")
     private FoodCategory foodCategory;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<FoodImage> images = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,7 +54,7 @@ public class Food extends BaseEntity {
     private Member member;
 
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory){
+    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner){
         this.title = title;
         this.name = name;
         this.stock = stock;
@@ -62,6 +62,7 @@ public class Food extends BaseEntity {
         this.price = price;
         this.content = content;
         this.foodCategory = foodCategory;
+        this.member = owner;
     }
 
     public void updateFood(UpdateFoodDto updateFoodDto)
