@@ -53,6 +53,7 @@ public interface SwaggerFoodApi {
     @Operation(summary = "음식 수정", description = "음식을 수정합니다")
     ResponseEntity<ApiBasicResponse> updateFood(
             @Parameter(description = "음식 id") Long foodId,
+            @Parameter(description = "음식 사진들", required = true) MultipartFile[] newImages,
             @Parameter(description = "음식 업데이트 dto") UpdateFoodDto updateFoodDto,
             @Parameter(description = "Bearer ey...") PrincipalDetails principalDetails);
 

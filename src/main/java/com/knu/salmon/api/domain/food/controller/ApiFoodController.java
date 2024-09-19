@@ -52,10 +52,11 @@ public class ApiFoodController implements SwaggerFoodApi{
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiBasicResponse> updateFood(
             @PathVariable("foodId") Long foodId,
+            @RequestPart(value = "images", required = false) MultipartFile[] newImages,
             @RequestBody UpdateFoodDto updateFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiBasicResponse response = foodService.updateFood(updateFoodDto, principalDetails, foodId);
+        ApiBasicResponse response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);
 
         return ResponseEntity.status(response.getCode()).body(response);
     }

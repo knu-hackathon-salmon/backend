@@ -12,6 +12,8 @@ import com.knu.salmon.api.domain.food.repository.FoodRepository;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
+import com.knu.salmon.api.domain.seller.entity.Shop;
+import com.knu.salmon.api.domain.seller.repository.ShopRepository;
 import com.knu.salmon.api.global.error.custom.FoodException;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
@@ -36,6 +38,7 @@ public class FoodService {
     private final MemberRepository memberRepository;
     private final FoodImageService foodImageService;
     private final FoodImageRepository foodImageRepository;
+    private final ShopRepository shopRepository;
 
     public ApiBasicResponse createFood(MultipartFile[] files, CreateFoodDto createFoodDto, PrincipalDetails principalDetails){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
@@ -50,6 +53,7 @@ public class FoodService {
                 .content(createFoodDto.getContent())
                 .expiration(createFoodDto.getExpiration())
                 .owner(member)
+                .trading(true)
                 .build();
 
         foodRepository.save(food);
@@ -81,6 +85,8 @@ public class FoodService {
             imageUrls.add(image.getImageUrl());
         }
 
+        Shop shop = shopRepository.findByMemberId(food.getMember().getId());
+
         FoodDetailResponseDto getFoodResponseDto = FoodDetailResponseDto.builder()
                 .title(food.getTitle())
                 .foodId(food.getId())
@@ -91,6 +97,9 @@ public class FoodService {
                 .name(food.getName())
                 .content(food.getContent())
                 .imageUrls(imageUrls)
+                .createdDate(food.getCreatedAt())
+                .trading(food.getTrading())
+                .shopName(shop.getShopName())
                 .build();
 
 
@@ -129,7 +138,7 @@ public class FoodService {
                 .build();
     }
 
-    public ApiBasicResponse updateFood(UpdateFoodDto updateFoodDto, PrincipalDetails principalDetails, Long foodId){
+    public ApiBasicResponse updateFood(UpdateFoodDto updateFoodDto, MultipartFile[] newImageList, PrincipalDetails principalDetails, Long foodId){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
@@ -139,6 +148,10 @@ public class FoodService {
         if(!food.getMember().equals(member)){
             throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
         }
+
+        foodImageRepository.deleteAllByFoodId(foodId);
+
+        foodImageService.uploadToBoardImages(newImageList, food);
 
         food.updateFood(updateFoodDto);
 
