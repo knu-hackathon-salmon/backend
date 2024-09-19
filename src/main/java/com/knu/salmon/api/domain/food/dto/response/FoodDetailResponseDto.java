@@ -21,12 +21,13 @@ public class FoodDetailResponseDto {
     private FoodCategory foodCategory;
     private List<String> imageUrls;
     private LocalDateTime createdDate;
+    private double latitude;
+    private double longitude;
     private Boolean trading;
     private String shopName;
 
     @Builder
-    public FoodDetailResponseDto(Long foodId, String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, List<String> imageUrls, LocalDateTime createdDate, Boolean trading, String shopName)
-    {
+    public FoodDetailResponseDto(Long foodId, String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, List<String> imageUrls, LocalDateTime createdDate, double latitude, double longitude, Boolean trading, String shopName) {
         this.foodId = foodId;
         this.title = title;
         this.name = name;
@@ -37,9 +38,13 @@ public class FoodDetailResponseDto {
         this.foodCategory = foodCategory;
         this.imageUrls = imageUrls;
         this.createdDate = createdDate;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.trading = trading;
         this.shopName = shopName;
     }
+
+
 
     public static FoodDetailResponseDto fromFood(Food food){
         return FoodDetailResponseDto.builder()
@@ -54,6 +59,8 @@ public class FoodDetailResponseDto {
                 .createdDate(food.getCreatedAt())
                 .trading(food.getTrading())
                 .shopName(food.getShop().getShopName())
+                .latitude(food.getLatitude())
+                .longitude(food.getLongitude())
                 .build();
 
     }

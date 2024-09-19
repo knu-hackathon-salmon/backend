@@ -1,8 +1,10 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
+import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.service.FoodService;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
@@ -72,5 +74,21 @@ public class ApiFoodController implements SwaggerFoodApi{
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
+    @PostMapping("/map/near/me")
+    public ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getMapNear(
+            @RequestBody FoodMapNearRequestDto foodMapNearRequestDto
+    ){
+        ApiDataResponse<List<FoodMapNearResponseDto>> response = foodService.getMapNear(foodMapNearRequestDto);
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @PostMapping("/map/near/box")
+    public ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getFoodsInBox(
+            @RequestBody FoodMapNearRequestDto foodMapNearRequestDto
+    ){
+        ApiDataResponse<List<FoodMapNearResponseDto>> response = foodService.getFoodsInBox(foodMapNearRequestDto);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
 
 }
