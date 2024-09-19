@@ -4,8 +4,10 @@ import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.Image.repository.FoodImageRepository;
 import com.knu.salmon.api.domain.Image.service.FoodImageService;
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
+import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.food.repository.FoodRepository;
@@ -25,6 +27,8 @@ import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -54,6 +58,8 @@ public class FoodService {
                 .price(createFoodDto.getPrice())
                 .content(createFoodDto.getContent())
                 .expiration(createFoodDto.getExpiration())
+                .latitude(shop.getLatitude())
+                .longitude(shop.getLongitude())
                 .shop(shop)
                 .trading(true)
                 .build();
@@ -138,5 +144,41 @@ public class FoodService {
                 .build();
     }
 
+    public ApiDataResponse<List<FoodMapNearResponseDto>> getMapNear(FoodMapNearRequestDto foodMapNearRequestDto) {
 
+        double neLat = foodMapNearRequestDto.getNeLat();
+        double neLng = foodMapNearRequestDto.getNeLng();
+        double swLat = foodMapNearRequestDto.getSwLat();
+        double swLng = foodMapNearRequestDto.getSwLng();
+        double userLat = foodMapNearRequestDto.getUserLat();
+        double userLng = foodMapNearRequestDto.getUserLng();
+
+        List<Food> foods = foodRepository.findFoodsInBoundsSortedByDistance(neLat, neLng, swLat, swLng, userLat, userLng);
+        List<FoodMapNearResponseDto> responseDtos = foods.stream().map(food -> FoodMapNearResponseDto.fromFood(food)).toList();
+
+        return ApiDataResponse.<List<FoodMapNearResponseDto>>builder()
+                .status(true)
+                .code(200)
+                .message("가까운 순으로 데이터 리턴")
+                .data(responseDtos)
+                .build();
+    }
+
+    public ApiDataResponse<List<FoodMapNearResponseDto>> getFoodsInBox(FoodMapNearRequestDto foodMapNearRequestDto) {
+
+        double neLat = foodMapNearRequestDto.getNeLat();
+        double neLng = foodMapNearRequestDto.getNeLng();
+        double swLat = foodMapNearRequestDto.getSwLat();
+        double swLng = foodMapNearRequestDto.getSwLng();
+
+        List<Food> foods = foodRepository.findFoodsInArea(neLat, neLng, swLat, swLng);
+        List<FoodMapNearResponseDto> responseDtos = foods.stream().map(food -> FoodMapNearResponseDto.fromFood(food)).toList();
+
+        return ApiDataResponse.<List<FoodMapNearResponseDto>>builder()
+                .status(true)
+                .code(200)
+                .message("box안에 데이터 리턴")
+                .data(responseDtos)
+                .build();
+    }
 }

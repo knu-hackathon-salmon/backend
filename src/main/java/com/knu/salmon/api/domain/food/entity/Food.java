@@ -44,6 +44,10 @@ public class Food extends BaseEntity {
     @Column(name = "food_content")
     private String content;
 
+    private double latitude;
+
+    private double longitude;
+
     @Column(name = "food_category")
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
@@ -59,17 +63,21 @@ public class Food extends BaseEntity {
     private Boolean trading;
 
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Shop shop, Boolean trading) {
+    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, double latitude, double longitude, FoodCategory foodCategory,  Shop shop, Boolean trading) {
         this.title = title;
         this.name = name;
         this.stock = stock;
         this.expiration = expiration;
         this.price = price;
         this.content = content;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.foodCategory = foodCategory;
         this.shop = shop;
         this.trading = trading;
     }
+
+
 
     public void updateFood(UpdateFoodDto updateFoodDto)
     {
