@@ -56,7 +56,7 @@ logging:
           BasicBinder: TRACE
 
 springdoc:
-  packages-to-scan: com.knu.fromnow
+  packages-to-scan: com.knu.salmon
   override-with-generic-response: true
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
