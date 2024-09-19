@@ -1,5 +1,6 @@
 package com.knu.salmon.api.domain.food.dto.response;
 
+import com.knu.salmon.api.domain.food.entity.Food;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,4 +28,16 @@ public class FoodOverviewResponseDto {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    public static FoodOverviewResponseDto fromFood(Food food) {
+        return FoodOverviewResponseDto.builder()
+                .foodId(food.getId())
+                .name(food.getName())
+                .title(food.getTitle())
+                .stock(food.getStock())
+                .price(food.getPrice())
+                .imageUrl(food.getImages().get(0).getImageUrl())
+                .build();
+    }
+
 }

@@ -22,7 +22,7 @@ public interface SwaggerFoodApi {
             @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
     })
     @Operation(summary = "음식 생성 로직", description = "File은 MultiPart/form-data 형식, Dto는 application/json 형식으로 보내주셔야 해요!")
-    ResponseEntity<ApiBasicResponse> createFood(
+    ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> createFood(
             @Parameter(description = "음식 사진들", required = true) MultipartFile[] images,
             @Parameter(description = "음식 내용", required = true) CreateFoodDto createFoodDto,
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
@@ -51,7 +51,7 @@ public interface SwaggerFoodApi {
             }
     )
     @Operation(summary = "음식 수정", description = "음식을 수정합니다")
-    ResponseEntity<ApiBasicResponse> updateFood(
+    ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> updateFood(
             @Parameter(description = "음식 id") Long foodId,
             @Parameter(description = "음식 사진들", required = true) MultipartFile[] newImages,
             @Parameter(description = "음식 업데이트 dto") UpdateFoodDto updateFoodDto,

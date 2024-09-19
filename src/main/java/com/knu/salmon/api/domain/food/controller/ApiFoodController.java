@@ -26,13 +26,13 @@ public class ApiFoodController implements SwaggerFoodApi{
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiBasicResponse> createFood(
+    public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> createFood(
             @RequestPart(value = "images", required = false) MultipartFile[] images,
             @RequestPart(value = "foodDto") CreateFoodDto createFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        ApiBasicResponse apiBasicResponse = foodService.createFood(images, createFoodDto, principalDetails);
-        return ResponseEntity.status(apiBasicResponse.getCode()).body(apiBasicResponse);
+        ApiDataResponse<FoodDetailResponseDto> response = foodService.createFood(images, createFoodDto, principalDetails);
+        return ResponseEntity.status(response.getCode()).body(response);
     }
 
     @GetMapping("/detail/{foodId}")
@@ -50,13 +50,13 @@ public class ApiFoodController implements SwaggerFoodApi{
 
     @PutMapping("{foodId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiBasicResponse> updateFood(
+    public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> updateFood(
             @PathVariable("foodId") Long foodId,
             @RequestPart(value = "images", required = false) MultipartFile[] newImages,
-            @RequestBody UpdateFoodDto updateFoodDto,
+            @RequestPart(value = "foodDto") UpdateFoodDto updateFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiBasicResponse response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);
+        ApiDataResponse<FoodDetailResponseDto> response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);
 
         return ResponseEntity.status(response.getCode()).body(response);
     }

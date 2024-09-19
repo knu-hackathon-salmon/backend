@@ -10,6 +10,8 @@ import com.knu.salmon.api.domain.Image.repository.FoodImageRepository;
 import com.knu.salmon.api.domain.food.entity.Food;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @Transactional
 public class FoodImageService {
 
+    private static final Logger log = LoggerFactory.getLogger(FoodImageService.class);
     private final FoodImageRepository foodImageRepository;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
@@ -81,13 +84,4 @@ public class FoodImageService {
     public String createImageUrl(String uniqueFileName) {
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, uniqueFileName);
     }
-
-
-    public List<FoodImage> getImageList(Optional<Food> food)
-    {
-        List<FoodImage> images = foodImageRepository.findByFood(food);
-
-        return images;
-    }
-
 }
