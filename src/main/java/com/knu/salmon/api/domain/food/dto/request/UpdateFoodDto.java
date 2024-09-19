@@ -22,4 +22,5 @@ public class UpdateFoodDto {
 
     private FoodCategory newFoodCategory;
 
+    private Boolean newTrading;
 }

@@ -27,10 +27,14 @@ public class FoodDetailResponseDto {
 
     private List<String> imageUrls;
 
-    private String createdDate;
+    private LocalDateTime createdDate;
+
+    private Boolean trading;
+
+    private String shopName;
 
     @Builder
-    public FoodDetailResponseDto(Long foodId, String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, List<String> imageUrls, String createdDate)
+    public FoodDetailResponseDto(Long foodId, String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, List<String> imageUrls, LocalDateTime createdDate, Boolean trading, String shopName)
     {
         this.foodId = foodId;
         this.title = title;
@@ -41,6 +45,9 @@ public class FoodDetailResponseDto {
         this.content = content;
         this.foodCategory = foodCategory;
         this.imageUrls = imageUrls;
+        this.createdDate = createdDate;
+        this.trading = trading;
+        this.shopName = shopName;
     }
 }
 

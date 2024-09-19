@@ -44,6 +44,7 @@ public class Food extends BaseEntity {
     private String content;
 
     @Column(name = "food_category")
+    @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
 
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
@@ -53,8 +54,11 @@ public class Food extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(name = "trading")
+    private Boolean trading;
+
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner){
+    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner, Boolean trading){
         this.title = title;
         this.name = name;
         this.stock = stock;
@@ -63,6 +67,7 @@ public class Food extends BaseEntity {
         this.content = content;
         this.foodCategory = foodCategory;
         this.member = owner;
+        this.trading = trading;
     }
 
     public void updateFood(UpdateFoodDto updateFoodDto)
@@ -74,6 +79,7 @@ public class Food extends BaseEntity {
         this.price = updateFoodDto.getNewPrice();
         this.content = updateFoodDto.getNewContent();
         this.foodCategory = updateFoodDto.getNewFoodCategory();
+        this.trading = updateFoodDto.getNewTrading();
     }
 
 
