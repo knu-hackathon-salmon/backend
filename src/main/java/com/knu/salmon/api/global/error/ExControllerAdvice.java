@@ -77,7 +77,7 @@ public class ExControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
         String errorMessage = "요청 데이터 형식이 잘못 되었습니다. API 요청 스펙을 다시 확인해주세요";
-        ApiErrorResponse apiErrorResponse = buildErrorResponseWithGeneralException(errorMessage, HttpStatus.BAD_REQUEST);
+        ApiErrorResponse apiErrorResponse = buildErrorResponseWithGeneralException(errorMessage + e.getMessage(), HttpStatus.BAD_REQUEST);
 
         return buildResponseEntity(apiErrorResponse);
     }
@@ -133,7 +133,7 @@ public class ExControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleAllUncaughtException(Exception e) {
         String errorMessage ="예상치 못한 에러가 발생했습니다.";
-        ApiErrorResponse apiErrorResponse = buildErrorResponseWithGeneralException(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        ApiErrorResponse apiErrorResponse = buildErrorResponseWithGeneralException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         return buildResponseEntity(apiErrorResponse);
     }

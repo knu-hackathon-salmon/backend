@@ -3,6 +3,7 @@ package com.knu.salmon.api.domain.food.entity;
 import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.member.entity.Member;
+import com.knu.salmon.api.domain.seller.entity.Shop;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,14 +52,14 @@ public class Food extends BaseEntity {
     private List<FoodImage> images = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
     @Column(name = "trading")
     private Boolean trading;
 
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner, Boolean trading){
+    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Shop shop, Boolean trading) {
         this.title = title;
         this.name = name;
         this.stock = stock;
@@ -66,7 +67,7 @@ public class Food extends BaseEntity {
         this.price = price;
         this.content = content;
         this.foodCategory = foodCategory;
-        this.member = owner;
+        this.shop = shop;
         this.trading = trading;
     }
 

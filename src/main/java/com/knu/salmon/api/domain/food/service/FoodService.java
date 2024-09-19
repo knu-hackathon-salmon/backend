@@ -22,6 +22,7 @@ import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,9 +41,10 @@ public class FoodService {
     private final FoodImageRepository foodImageRepository;
     private final ShopRepository shopRepository;
 
-    public ApiBasicResponse createFood(MultipartFile[] files, CreateFoodDto createFoodDto, PrincipalDetails principalDetails){
+    public ApiDataResponse<FoodDetailResponseDto> createFood(MultipartFile[] files, CreateFoodDto createFoodDto, PrincipalDetails principalDetails){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+        Shop shop = shopRepository.findByMemberId(member.getId());
 
         Food food = Food.builder()
                 .title(createFoodDto.getTitle())
@@ -52,115 +54,67 @@ public class FoodService {
                 .price(createFoodDto.getPrice())
                 .content(createFoodDto.getContent())
                 .expiration(createFoodDto.getExpiration())
-                .owner(member)
+                .shop(shop)
                 .trading(true)
                 .build();
-
         foodRepository.save(food);
 
+        shop.getFoodList().add(food);
+        shopRepository.save(shop);
         foodImageService.uploadToBoardImages(files, food);
-
-        //멤버 food 추가 시켜주기
-
-        foodRepository.save(food);
-
-        ApiBasicResponse apiBasicResponse = ApiBasicResponse.builder()
-                .status(true)
-                .code(200)
-                .message("음식 생성 성공!")
-                .build();
-
-        return apiBasicResponse;
-    }
-
-    public ApiDataResponse<FoodDetailResponseDto> getFoodDetail(Long foodId){
-
-        Food food =  foodRepository.findById(foodId).orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));;
-
-        List<FoodImage> imageList =  foodImageService.getImageList(Optional.ofNullable(food));
-
-        List<String> imageUrls = new ArrayList<>();
-
-        for(FoodImage image: imageList){
-            imageUrls.add(image.getImageUrl());
-        }
-
-        Shop shop = shopRepository.findByMemberId(food.getMember().getId());
-
-        FoodDetailResponseDto getFoodResponseDto = FoodDetailResponseDto.builder()
-                .title(food.getTitle())
-                .foodId(food.getId())
-                .price(food.getPrice())
-                .foodCategory(food.getFoodCategory())
-                .stock(food.getStock())
-                .expiration(food.getExpiration())
-                .name(food.getName())
-                .content(food.getContent())
-                .imageUrls(imageUrls)
-                .createdDate(food.getCreatedAt())
-                .trading(food.getTrading())
-                .shopName(shop.getShopName())
-                .build();
-
 
         return ApiDataResponse.<FoodDetailResponseDto>builder()
                 .status(true)
                 .code(200)
-                .message("foodId : "+ foodId + " 해당하는 글 불러오기 성공!")
-                .data(getFoodResponseDto)
+                .message("글 생성을 성공! 추가 된 데이터는 다음과 같습니다")
+                .data(FoodDetailResponseDto.fromFood(food))
+                .build();
+    }
+
+    public ApiDataResponse<FoodDetailResponseDto> getFoodDetail(Long foodId){
+        Food food =  foodRepository.findById(foodId)
+                .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
+
+        return ApiDataResponse.<FoodDetailResponseDto>builder()
+                .status(true)
+                .code(200)
+                .message("글 불러오기 성공! 불러 온 데이터는 다음과 같습니다")
+                .data(FoodDetailResponseDto.fromFood(food))
                 .build();
     }
 
     public ApiDataResponse<List<FoodOverviewResponseDto>> getFoodOverview(){
-        List<FoodOverviewResponseDto> responseDtoList = new ArrayList<>();
         List<Food> foodList = foodRepository.findAll();
+        List<FoodOverviewResponseDto> responseDtoList = foodList.stream()
+                .map(FoodOverviewResponseDto::fromFood).toList();
 
-        for(Food food : foodList){
-            FoodImage foodImage = foodImageRepository.findAllByFoodId(food.getId()).get(0);
-            String imageUrl = foodImage.getImageUrl();
-
-            FoodOverviewResponseDto foodOverviewResponseDto = FoodOverviewResponseDto.builder()
-                    .foodId(food.getId())
-                    .name(food.getName())
-                    .title(food.getTitle())
-                    .stock(food.getStock())
-                    .price(food.getPrice())
-                    .imageUrl(imageUrl)
-                    .build();
-            responseDtoList.add(foodOverviewResponseDto);
-        }
 
         return ApiDataResponse.<List<FoodOverviewResponseDto>>builder()
                 .status(true)
                 .code(200)
-                .message("음식 리스트 반환 성공!")
+                .message("음식 리스트 반환 성공! 불러 온 데이터는 다음과 같습니다")
                 .data(responseDtoList)
                 .build();
     }
 
-    public ApiBasicResponse updateFood(UpdateFoodDto updateFoodDto, MultipartFile[] newImageList, PrincipalDetails principalDetails, Long foodId){
+    public ApiDataResponse<FoodDetailResponseDto> updateFood(UpdateFoodDto updateFoodDto, MultipartFile[] newImageList, PrincipalDetails principalDetails, Long foodId){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
 
-        if(!food.getMember().equals(member)){
+        if(!food.getShop().getMember().equals(member)){
             throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
         }
 
-        foodImageRepository.deleteAllByFoodId(foodId);
+        //////////////////////
 
-        foodImageService.uploadToBoardImages(newImageList, food);
-
-        food.updateFood(updateFoodDto);
-
-        foodRepository.save(food);
-
-        return ApiBasicResponse.builder()
+        return ApiDataResponse.<FoodDetailResponseDto>builder()
                 .status(true)
                 .code(200)
-                .message("음식 정보업데이트 성공! " )
+                .message("음식 정보 업데이트 성공! 업데이트 한 이후 데이터는 다음과 같습니다")
+                .data(FoodDetailResponseDto.fromFood(food))
                 .build();
     }
 
@@ -171,7 +125,7 @@ public class FoodService {
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
 
-        if(!food.getMember().equals(member)){
+        if(!food.getShop().getMember().equals(member)){
             throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
         }
 
