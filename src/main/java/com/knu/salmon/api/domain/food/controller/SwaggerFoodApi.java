@@ -1,8 +1,10 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
+import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
@@ -66,5 +68,24 @@ public interface SwaggerFoodApi {
     ResponseEntity<ApiBasicResponse> deleteFood(
             @Parameter(description = "음식 아이디", required = true) Long foodId,
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Food 리스트 반환 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "내 주위 가까운 food 리스트 반환", description = "내 주위 가까운 food 리스트 반환합니다.")
+    ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getMapNear(
+            @Parameter(description = "위치 정보 dto") FoodMapNearRequestDto foodMapNearRequestDto
+    );
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Food 리스트 반환 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "box 안에 food 리스트 반환", description = "box 안에 food 리스트 반환.")
+    ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getFoodsInBox(
+            @Parameter(description = "위치 정보 dto") FoodMapNearRequestDto foodMapNearRequestDto
+    );
+
 }
 
