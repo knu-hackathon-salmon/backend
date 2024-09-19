@@ -42,12 +42,14 @@ public class FoodService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
         Food food = Food.builder()
+                .title(createFoodDto.getTitle())
                 .name(createFoodDto.getName())
                 .foodCategory(createFoodDto.getFoodCategory())
                 .stock(createFoodDto.getStock())
                 .price(createFoodDto.getPrice())
                 .content(createFoodDto.getContent())
                 .expiration(createFoodDto.getExpiration())
+                .owner(member)
                 .build();
 
         foodRepository.save(food);

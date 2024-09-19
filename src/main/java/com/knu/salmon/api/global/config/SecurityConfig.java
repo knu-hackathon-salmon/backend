@@ -46,6 +46,8 @@ public class SecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher("/api/oauth2/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/v3/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/food/detail/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/food/overview")).permitAll()
                                 .anyRequest().authenticated()
                         )
                         .oauth2Login((oauth2) -> oauth2

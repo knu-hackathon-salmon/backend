@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member")
     private Customer customer;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Food> food;
 
     @Builder
