@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.food.entity;
 
 import com.knu.salmon.api.domain.Image.entity.FoodImage;
+import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.global.spec.BaseEntity;
@@ -56,6 +57,10 @@ public class Food extends BaseEntity {
 
     @Column(name = "trading")
     private Boolean trading;
+
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
+
 
     @Builder
     public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner, Boolean trading){

@@ -1,21 +1,17 @@
 package com.knu.salmon.api.domain.seller.entity;
 
+import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.global.spec.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "shops")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,6 +39,9 @@ public class Shop extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
 
     @Builder
     public Shop(String shopName, String shopDescription, LocalDateTime startTime, LocalDateTime endTime, double latitude, double longitude, String phoneNumber, Member member) {

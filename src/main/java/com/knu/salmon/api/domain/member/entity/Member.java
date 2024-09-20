@@ -1,5 +1,6 @@
 package com.knu.salmon.api.domain.member.entity;
 
+import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.customer.entity.Customer;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.type.MemberType;
@@ -12,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "members")
@@ -40,7 +42,8 @@ public class Member extends BaseEntity {
     private Customer customer;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Food> food;
+    private List<Food> food = new ArrayList<>();;
+
 
     @Builder
     public Member(String email, Role role, String refreshToken, MemberType memberType) {
