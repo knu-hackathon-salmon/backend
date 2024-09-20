@@ -27,29 +27,22 @@ public class Food extends BaseEntity {
     @Column(name = "food_id")
     private Long id;
 
-    @Column(name = "food_title")
     private String title;
 
-    @Column(name = "food_name")
     private String name;
 
-    @Column(name = "food_stock")
     private Long stock;
 
-    @Column(name = "food_expiration")
     private LocalDateTime expiration;
 
-    @Column(name = "food_price")
     private Long price;
 
-    @Column(name = "food_content")
     private String content;
 
     private double latitude;
 
     private double longitude;
 
-    @Column(name = "food_category")
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
 
@@ -60,12 +53,10 @@ public class Food extends BaseEntity {
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
-    @Column(name = "trading")
     private Boolean trading;
 
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>();
-
 
     @Builder
     public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, double latitude, double longitude, FoodCategory foodCategory,  Shop shop, Boolean trading) {

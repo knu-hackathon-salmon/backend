@@ -39,7 +39,7 @@ public class MessageService {
     public List<MessageDto> getPreviousMessages(Chat chat){
         List<MessageDto> responseDtoList = new ArrayList<>();
 
-        List<Message> messageList = messageRepository.findByChatId(chat.getChatId());
+        List<Message> messageList = messageRepository.findAllByChat(chat);
 
         for(Message message : messageList){
             MessageDto messageDto = MessageDto.builder()
@@ -72,7 +72,7 @@ public class MessageService {
         }
 
         List<MessageDto> responseDtoList = new ArrayList<>();
-        List<Message> messageList = messageRepository.findByChatId(chatId);
+        List<Message> messageList = messageRepository.findAllByChat(chat);
 
         for (Message message : messageList) {
             MessageDto messageDto = MessageDto.builder()

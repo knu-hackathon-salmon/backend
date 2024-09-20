@@ -3,12 +3,16 @@ package com.knu.salmon.api.domain.chat.entity;
 import com.knu.salmon.api.domain.customer.entity.Customer;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.Member;
+import com.knu.salmon.api.domain.message.entity.Message;
 import com.knu.salmon.api.domain.seller.entity.Shop;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -31,6 +35,10 @@ public class Chat
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id")
     private Food food;
+
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    private List<Message> message = new ArrayList<>();
+
 
     @Builder
     public Chat( Shop shop, Customer customer, Food food) {

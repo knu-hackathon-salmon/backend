@@ -99,8 +99,14 @@ public class ChatService {
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
-        List<Chat> chatList = chatRepository.findByMember(member);
+        List<Chat> chatList = new ArrayList<>();
 
+        if(member.getMemberType() == MemberType.SHOP){
+            chatList = chatRepository.findAllByShop(member.getShop());
+        } else{
+            chatList = chatRepository.findAllByCustomer(member.getCustomer());
+        }
+        
         List<ChatDto> responseDtoList = new ArrayList<>();
 
         for(Chat chat: chatList){
