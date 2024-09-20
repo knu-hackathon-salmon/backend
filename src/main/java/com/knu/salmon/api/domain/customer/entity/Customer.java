@@ -1,17 +1,15 @@
 package com.knu.salmon.api.domain.customer.entity;
 
+import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.member.entity.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "customers")
 @Getter
@@ -32,6 +30,9 @@ public class Customer {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
 
     @Builder
     public Customer(String nickname, String photoUrl, double latitude, double longitude, Member member) {

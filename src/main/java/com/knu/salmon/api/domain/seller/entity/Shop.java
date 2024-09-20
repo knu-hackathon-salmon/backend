@@ -1,5 +1,9 @@
 package com.knu.salmon.api.domain.seller.entity;
 
+import com.knu.salmon.api.domain.chat.entity.Chat;
+import com.knu.salmon.api.domain.member.entity.Member;
+import com.knu.salmon.api.global.spec.BaseEntity;
+import jakarta.persistence.*;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.global.spec.BaseEntity;
@@ -51,6 +55,8 @@ public class Shop extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private List<Chat> chats = new ArrayList<>();
+  
     private List<Food> foodList = new ArrayList<>();
 
     @Builder
