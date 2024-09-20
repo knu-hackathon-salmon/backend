@@ -2,6 +2,8 @@ package com.knu.salmon.api.domain.member.controller;
 
 import com.knu.salmon.api.domain.member.dto.request.CustomerSignUpRequest;
 import com.knu.salmon.api.domain.member.dto.request.ShopSignUpRequest;
+import com.knu.salmon.api.domain.member.dto.request.TempOauth2SignUpRequestDto;
+import com.knu.salmon.api.domain.member.dto.response.TempTokenResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +15,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public interface SwaggerMemberApi {
+
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "임시로 회원가입 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "임시 회원가입", description = "임시 회원가입")
+    ResponseEntity<ApiDataResponse<TempTokenResponseDto>> tempOauth2SignUp(
+            @Parameter(description = "효은님 이메일요") TempOauth2SignUpRequestDto tempOauth2SignUpRequestDto
+    );
+
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "업체로 회원가입 성공!"),
             @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
