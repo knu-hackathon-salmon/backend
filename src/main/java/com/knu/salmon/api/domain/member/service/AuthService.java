@@ -17,6 +17,7 @@ import com.knu.salmon.api.domain.shop.entity.Shop;
 import com.knu.salmon.api.domain.shop.repository.ShopRepository;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
+import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class AuthService {
     private final FoodImageService foodImageService;
     private final JwtService jwtService;
 
-    public ApiDataResponse<TempTokenResponseDto> tempOauth2SignUp(TempOauth2SignUpRequestDto tempOauth2SignUpRequestDto){
+    public TempTokenResponseDto tempOauth2SignUp(TempOauth2SignUpRequestDto tempOauth2SignUpRequestDto){
 
         String accessToken = jwtService.createAccessToken(tempOauth2SignUpRequestDto.getEmail(), Role.ROLE_NEW_USER.name());
         String refreshToken = jwtService.createRefreshToken();
@@ -51,14 +52,9 @@ public class AuthService {
 
         memberRepository.save(member);
 
-        return ApiDataResponse.<TempTokenResponseDto>builder()
-                .status(true)
-                .code(200)
-                .message("효은님 화이팅 하세요 아자아자")
-                .data(TempTokenResponseDto.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build())
+        return TempTokenResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
