@@ -1,8 +1,10 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
+import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
@@ -22,7 +24,7 @@ public interface SwaggerFoodApi {
             @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
     })
     @Operation(summary = "음식 생성 로직", description = "File은 MultiPart/form-data 형식, Dto는 application/json 형식으로 보내주셔야 해요!")
-    ResponseEntity<ApiBasicResponse> createFood(
+    ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> createFood(
             @Parameter(description = "음식 사진들", required = true) MultipartFile[] images,
             @Parameter(description = "음식 내용", required = true) CreateFoodDto createFoodDto,
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
@@ -51,7 +53,7 @@ public interface SwaggerFoodApi {
             }
     )
     @Operation(summary = "음식 수정", description = "음식을 수정합니다")
-    ResponseEntity<ApiBasicResponse> updateFood(
+    ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> updateFood(
             @Parameter(description = "음식 id") Long foodId,
             @Parameter(description = "음식 사진들", required = true) MultipartFile[] newImages,
             @Parameter(description = "음식 업데이트 dto") UpdateFoodDto updateFoodDto,
@@ -66,5 +68,24 @@ public interface SwaggerFoodApi {
     ResponseEntity<ApiBasicResponse> deleteFood(
             @Parameter(description = "음식 아이디", required = true) Long foodId,
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Food 리스트 반환 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "내 주위 가까운 food 리스트 반환", description = "내 주위 가까운 food 리스트 반환합니다.")
+    ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getMapNear(
+            @Parameter(description = "위치 정보 dto") FoodMapNearRequestDto foodMapNearRequestDto
+    );
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Food 리스트 반환 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "box 안에 food 리스트 반환", description = "box 안에 food 리스트 반환.")
+    ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getFoodsInBox(
+            @Parameter(description = "위치 정보 dto") FoodMapNearRequestDto foodMapNearRequestDto
+    );
+
 }
 

@@ -1,8 +1,10 @@
 package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
+import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.service.FoodService;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
@@ -26,13 +28,13 @@ public class ApiFoodController implements SwaggerFoodApi{
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiBasicResponse> createFood(
+    public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> createFood(
             @RequestPart(value = "images", required = false) MultipartFile[] images,
             @RequestPart(value = "foodDto") CreateFoodDto createFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        ApiBasicResponse apiBasicResponse = foodService.createFood(images, createFoodDto, principalDetails);
-        return ResponseEntity.status(apiBasicResponse.getCode()).body(apiBasicResponse);
+        ApiDataResponse<FoodDetailResponseDto> response = foodService.createFood(images, createFoodDto, principalDetails);
+        return ResponseEntity.status(response.getCode()).body(response);
     }
 
     @GetMapping("/detail/{foodId}")
@@ -50,13 +52,13 @@ public class ApiFoodController implements SwaggerFoodApi{
 
     @PutMapping("{foodId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiBasicResponse> updateFood(
+    public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> updateFood(
             @PathVariable("foodId") Long foodId,
             @RequestPart(value = "images", required = false) MultipartFile[] newImages,
-            @RequestBody UpdateFoodDto updateFoodDto,
+            @RequestPart(value = "foodDto") UpdateFoodDto updateFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiBasicResponse response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);
+        ApiDataResponse<FoodDetailResponseDto> response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);
 
         return ResponseEntity.status(response.getCode()).body(response);
     }
@@ -72,5 +74,21 @@ public class ApiFoodController implements SwaggerFoodApi{
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
+    @PostMapping("/map/near/me")
+    public ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getMapNear(
+            @RequestBody FoodMapNearRequestDto foodMapNearRequestDto
+    ){
+        ApiDataResponse<List<FoodMapNearResponseDto>> response = foodService.getMapNear(foodMapNearRequestDto);
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @PostMapping("/map/near/box")
+    public ResponseEntity<ApiDataResponse<List<FoodMapNearResponseDto>>> getFoodsInBox(
+            @RequestBody FoodMapNearRequestDto foodMapNearRequestDto
+    ){
+        ApiDataResponse<List<FoodMapNearResponseDto>> response = foodService.getFoodsInBox(foodMapNearRequestDto);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
 
 }

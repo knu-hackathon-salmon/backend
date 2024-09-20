@@ -44,7 +44,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Food> food = new ArrayList<>();;
 
-
     @Builder
     public Member(String email, Role role, String refreshToken, MemberType memberType) {
         this.email = email;

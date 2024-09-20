@@ -4,6 +4,7 @@ import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.member.entity.Member;
+import com.knu.salmon.api.domain.seller.entity.Shop;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -44,6 +45,10 @@ public class Food extends BaseEntity {
     @Column(name = "food_content")
     private String content;
 
+    private double latitude;
+
+    private double longitude;
+
     @Column(name = "food_category")
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
@@ -52,8 +57,8 @@ public class Food extends BaseEntity {
     private List<FoodImage> images = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
     @Column(name = "trading")
     private Boolean trading;
@@ -63,17 +68,21 @@ public class Food extends BaseEntity {
 
 
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, Member owner, Boolean trading){
+    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, double latitude, double longitude, FoodCategory foodCategory,  Shop shop, Boolean trading) {
         this.title = title;
         this.name = name;
         this.stock = stock;
         this.expiration = expiration;
         this.price = price;
         this.content = content;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.foodCategory = foodCategory;
-        this.member = owner;
+        this.shop = shop;
         this.trading = trading;
     }
+
+
 
     public void updateFood(UpdateFoodDto updateFoodDto)
     {
