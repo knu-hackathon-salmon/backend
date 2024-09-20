@@ -2,6 +2,8 @@ package com.knu.salmon.api.domain.member.controller;
 
 import com.knu.salmon.api.domain.member.dto.request.CustomerSignUpRequest;
 import com.knu.salmon.api.domain.member.dto.request.ShopSignUpRequest;
+import com.knu.salmon.api.domain.member.dto.request.TempOauth2SignUpRequestDto;
+import com.knu.salmon.api.domain.member.dto.response.TempTokenResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.service.AuthService;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class ApiMemberController implements SwaggerMemberApi{
 
     private final AuthService authService;
+
+    @PostMapping("/oauth2/temp")
+    public ResponseEntity<ApiDataResponse<TempTokenResponseDto>> tempOauth2SignUp(
+            @RequestBody TempOauth2SignUpRequestDto tempOauth2SignUpRequestDto
+    ){
+
+        ApiDataResponse<TempTokenResponseDto> response = authService.tempOauth2SignUp(tempOauth2SignUpRequestDto);
+
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
 
     @PostMapping("/shop/sign-up")
     @PreAuthorize("isAuthenticated()")

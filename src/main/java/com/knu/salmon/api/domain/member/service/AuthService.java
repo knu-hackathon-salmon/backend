@@ -1,10 +1,13 @@
 package com.knu.salmon.api.domain.member.service;
 
+import com.knu.salmon.api.auth.jwt.service.JwtService;
 import com.knu.salmon.api.domain.Image.service.FoodImageService;
 import com.knu.salmon.api.domain.member.dto.request.CustomerSignUpRequest;
 import com.knu.salmon.api.domain.customer.entity.Customer;
 import com.knu.salmon.api.domain.customer.repository.CustomerRepository;
 import com.knu.salmon.api.domain.member.dto.request.ShopSignUpRequest;
+import com.knu.salmon.api.domain.member.dto.request.TempOauth2SignUpRequestDto;
+import com.knu.salmon.api.domain.member.dto.response.TempTokenResponseDto;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.entity.type.MemberType;
@@ -33,6 +36,31 @@ public class AuthService {
     private final ShopRepository shopRepository;
     private final CustomerRepository customerRepository;
     private final FoodImageService foodImageService;
+    private final JwtService jwtService;
+
+    public ApiDataResponse<TempTokenResponseDto> tempOauth2SignUp(TempOauth2SignUpRequestDto tempOauth2SignUpRequestDto){
+
+        String accessToken = jwtService.createAccessToken(tempOauth2SignUpRequestDto.getEmail(), Role.ROLE_NEW_USER.name());
+        String refreshToken = jwtService.createRefreshToken();
+
+        Member member = Member.builder()
+                .role(Role.ROLE_NEW_USER)
+                .email(tempOauth2SignUpRequestDto.getEmail())
+                .refreshToken(refreshToken)
+                .build();
+
+        memberRepository.save(member);
+
+        return ApiDataResponse.<TempTokenResponseDto>builder()
+                .status(true)
+                .code(200)
+                .message("효은님 화이팅 하세요 아자아자")
+                .data(TempTokenResponseDto.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build())
+                .build();
+    }
 
     public ApiDataResponse<ShopSignUpRequest> shopSignUp(ShopSignUpRequest shopSignUpRequest, MultipartFile file, PrincipalDetails principalDetails){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
