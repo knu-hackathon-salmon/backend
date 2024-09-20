@@ -22,7 +22,13 @@ public class Customer {
 
     private String nickname;
 
+    private String phoneNumber;
+
     private String photoUrl;
+
+    private String roadAddress;
+
+    private String detailAddress;
 
     private double latitude;
 
@@ -35,9 +41,12 @@ public class Customer {
     private List<Chat> chats = new ArrayList<>();
 
     @Builder
-    public Customer(String nickname, String photoUrl, double latitude, double longitude, Member member) {
+    public Customer(String nickname, String phoneNumber, String photoUrl, String roadAddress, String detailAddress, double latitude, double longitude, Member member) {
         this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
         this.photoUrl = photoUrl;
+        this.roadAddress = roadAddress;
+        this.detailAddress = detailAddress;
         this.latitude = latitude;
         this.longitude = longitude;
         this.member = member;

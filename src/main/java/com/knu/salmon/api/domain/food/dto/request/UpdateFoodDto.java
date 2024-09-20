@@ -10,13 +10,11 @@ public class UpdateFoodDto {
 
     private String newTitle;
 
-    private String newName;
+    private int newStock;
 
-    private Long newStock;
+    private String newExpiration;
 
-    private LocalDateTime newExpiration;
-
-    private Long newPrice;
+    private int newPrice;
 
     private String newContent;
 

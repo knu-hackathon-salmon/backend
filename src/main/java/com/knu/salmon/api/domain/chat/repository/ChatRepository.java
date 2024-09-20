@@ -2,7 +2,7 @@ package com.knu.salmon.api.domain.chat.repository;
 
 import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.customer.entity.Customer;
-import com.knu.salmon.api.domain.seller.entity.Shop;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

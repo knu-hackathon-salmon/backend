@@ -6,8 +6,6 @@ import com.knu.salmon.api.domain.chat.dto.ChatDto;
 import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.chat.repository.ChatRepository;
 import com.knu.salmon.api.domain.customer.entity.Customer;
-import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
-import com.knu.salmon.api.domain.food.dto.response.FoodOverviewResponseDto;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.food.repository.FoodRepository;
 import com.knu.salmon.api.domain.member.entity.Member;
@@ -16,21 +14,18 @@ import com.knu.salmon.api.domain.member.entity.type.MemberType;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.domain.message.dto.MessageDto;
 import com.knu.salmon.api.domain.message.service.MessageService;
-import com.knu.salmon.api.domain.seller.entity.Shop;
-import com.knu.salmon.api.domain.seller.repository.ShopRepository;
+import com.knu.salmon.api.domain.shop.entity.Shop;
+import com.knu.salmon.api.domain.shop.repository.ShopRepository;
 import com.knu.salmon.api.global.error.custom.FoodException;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.custom.ShopException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
 import com.knu.salmon.api.global.error.errorcode.custom.FoodErrorCode;
 import com.knu.salmon.api.global.error.errorcode.custom.ShopErrorCode;
-import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +101,7 @@ public class ChatService {
         } else{
             chatList = chatRepository.findAllByCustomer(member.getCustomer());
         }
-        
+
         List<ChatDto> responseDtoList = new ArrayList<>();
 
         for(Chat chat: chatList){
@@ -126,7 +121,6 @@ public class ChatService {
                     .foodId(food.getId())
                     .chatId(chat.getChatId())
                     .foodTitle(food.getTitle())
-                    .foodName(food.getName())
                     .opponentName(opponentName)
                     .imageUrl(imageUrl)
                     .build();

@@ -2,9 +2,8 @@ package com.knu.salmon.api.domain.chat.entity;
 
 import com.knu.salmon.api.domain.customer.entity.Customer;
 import com.knu.salmon.api.domain.food.entity.Food;
-import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.message.entity.Message;
-import com.knu.salmon.api.domain.seller.entity.Shop;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

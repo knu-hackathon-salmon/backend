@@ -2,6 +2,7 @@ package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
 import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMyLocationRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SwaggerFoodApi {
     @ApiResponses({
@@ -44,7 +46,9 @@ public interface SwaggerFoodApi {
             @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
     })
     @Operation(summary = "홈 화면에 음식 리스트 조회", description = "홈 화면에 음식 리스트를 조회합니다")
-    ResponseEntity<ApiDataResponse<List<FoodOverviewResponseDto>>> getFoodOverView();
+    ResponseEntity<ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>>> getFoodOverView(
+            @Parameter(description = "현재 내 위치 dto")FoodMyLocationRequestDto foodMyLocationRequestDto
+    );
 
     @ApiResponses(
             value = {

@@ -3,6 +3,7 @@ package com.knu.salmon.api.domain.food.dto.response;
 import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.food.entity.FoodCategory;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,55 +13,51 @@ import java.util.List;
 @Getter
 public class FoodDetailResponseDto {
     private Long foodId;
-    private String title;
-    private String name;
-    private Long stock;
-    private LocalDateTime expiration;
-    private Long price;
-    private String content;
-    private FoodCategory foodCategory;
-    private List<String> imageUrls;
-    private LocalDateTime createdDate;
-    private double latitude;
-    private double longitude;
-    private Boolean trading;
+    private String shopImageUrl;
     private String shopName;
+    private String title;
+    private int price;
+    private int likesCount;
+    private String roadAddress;
+    private String businessHours;
+    private String phoneNumber;
+    private int stock;
+    private String expiration;
+    private String content;
+    private List<String> foodImages;
 
     @Builder
-    public FoodDetailResponseDto(Long foodId, String title, String name, Long stock, LocalDateTime expiration, Long price, String content, FoodCategory foodCategory, List<String> imageUrls, LocalDateTime createdDate, double latitude, double longitude, Boolean trading, String shopName) {
+    public FoodDetailResponseDto(Long foodId, String shopImageUrl, String shopName, String title, int price, int likesCount, String roadAddress, String businessHours, String phoneNumber, int stock, String expiration, String content, List<String> foodImages) {
         this.foodId = foodId;
+        this.shopImageUrl = shopImageUrl;
+        this.shopName = shopName;
         this.title = title;
-        this.name = name;
+        this.price = price;
+        this.likesCount = likesCount;
+        this.roadAddress = roadAddress;
+        this.businessHours = businessHours;
+        this.phoneNumber = phoneNumber;
         this.stock = stock;
         this.expiration = expiration;
-        this.price = price;
         this.content = content;
-        this.foodCategory = foodCategory;
-        this.imageUrls = imageUrls;
-        this.createdDate = createdDate;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.trading = trading;
-        this.shopName = shopName;
+        this.foodImages = foodImages;
     }
 
-
-
-    public static FoodDetailResponseDto fromFood(Food food){
+    public static FoodDetailResponseDto fromFood(Food food, Shop shop){
         return FoodDetailResponseDto.builder()
                 .foodId(food.getId())
+                .shopImageUrl(shop.getPhotoUrl())
+                .shopName(shop.getShopName())
                 .title(food.getTitle())
-                .name(food.getName())
+                .price(food.getPrice())
+                .likesCount(food.getLikesCount())
+                .roadAddress(shop.getRoadAddress())
+                .businessHours(shop.getBusinessHours())
+                .phoneNumber(shop.getPhoneNumber())
                 .stock(food.getStock())
                 .expiration(food.getExpiration())
-                .price(food.getPrice())
                 .content(food.getContent())
-                .imageUrls(food.getImages().stream().map(FoodImage::getImageUrl).toList())
-                .createdDate(food.getCreatedAt())
-                .trading(food.getTrading())
-                .shopName(food.getShop().getShopName())
-                .latitude(food.getLatitude())
-                .longitude(food.getLongitude())
+                .foodImages(food.getImages().stream().map(FoodImage::getImageUrl).toList())
                 .build();
 
     }

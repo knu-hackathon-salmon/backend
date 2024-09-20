@@ -9,19 +9,17 @@ public class FoodMapNearResponseDto {
     private Long id;
     private String title;
     private String storeName;
-    private String foodName;
-    private Long price;
-    private Long stock;
+    private int price;
+    private int stock;
     private double latitude;
     private double longitude;
     private String imageUrl;
 
     @Builder
-    public FoodMapNearResponseDto(Long id, String title, String storeName, String foodName, Long price, Long stock, double latitude, double longitude, String imageUrl) {
+    public FoodMapNearResponseDto(Long id, String title, String storeName,  int price, int stock, double latitude, double longitude, String imageUrl) {
         this.id = id;
         this.title = title;
         this.storeName = storeName;
-        this.foodName = foodName;
         this.price = price;
         this.stock = stock;
         this.latitude = latitude;
@@ -34,7 +32,6 @@ public class FoodMapNearResponseDto {
                 .id(food.getId())
                 .title(food.getTitle())
                 .storeName(food.getShop().getShopName())
-                .foodName(food.getName())
                 .price(food.getPrice())
                 .stock(food.getStock())
                 .latitude(food.getLatitude())

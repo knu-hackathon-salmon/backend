@@ -3,15 +3,13 @@ package com.knu.salmon.api.domain.food.entity;
 import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
-import com.knu.salmon.api.domain.member.entity.Member;
-import com.knu.salmon.api.domain.seller.entity.Shop;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.sql.Update;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,19 +27,19 @@ public class Food extends BaseEntity {
 
     private String title;
 
-    private String name;
+    private int stock;
 
-    private Long stock;
+    private String expiration;
 
-    private LocalDateTime expiration;
-
-    private Long price;
+    private int price;
 
     private String content;
 
     private double latitude;
 
     private double longitude;
+
+    private int likesCount;
 
     @Enumerated(EnumType.STRING)
     private FoodCategory foodCategory;
@@ -59,15 +57,15 @@ public class Food extends BaseEntity {
     private List<Chat> chats = new ArrayList<>();
 
     @Builder
-    public Food(String title, String name, Long stock, LocalDateTime expiration, Long price, String content, double latitude, double longitude, FoodCategory foodCategory,  Shop shop, Boolean trading) {
+    public Food(String title, int stock, String expiration, int price, String content, double latitude, double longitude, int likesCount, FoodCategory foodCategory, Shop shop, Boolean trading) {
         this.title = title;
-        this.name = name;
         this.stock = stock;
         this.expiration = expiration;
         this.price = price;
         this.content = content;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.likesCount = likesCount;
         this.foodCategory = foodCategory;
         this.shop = shop;
         this.trading = trading;
@@ -75,10 +73,10 @@ public class Food extends BaseEntity {
 
 
 
+
     public void updateFood(UpdateFoodDto updateFoodDto)
     {
         this.title = updateFoodDto.getNewTitle();
-        this.name = updateFoodDto.getNewName();
         this.stock = updateFoodDto.getNewStock();
         this.expiration = updateFoodDto.getNewExpiration();
         this.price = updateFoodDto.getNewPrice();
