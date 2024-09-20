@@ -1,5 +1,6 @@
 package com.knu.salmon.api.domain.food.service;
 
+import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.Image.repository.FoodImageRepository;
 import com.knu.salmon.api.domain.Image.service.FoodImageService;
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
@@ -23,6 +24,8 @@ import com.knu.salmon.api.global.error.errorcode.custom.FoodErrorCode;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +43,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class FoodService {
+    private static final Logger log = LoggerFactory.getLogger(FoodService.class);
     private final FoodRepository foodRepository;
     private final MemberRepository memberRepository;
     private final FoodImageService foodImageService;
@@ -67,7 +71,14 @@ public class FoodService {
 
         shop.getFoodList().add(food);
         shopRepository.save(shop);
+
         foodImageService.uploadToBoardImages(files, food);
+
+        List<String> list = food.getImages().stream().map(FoodImage::getImageUrl).toList();
+        for (String s : list) {
+
+            log.info("images urls: {}", s);
+        }
 
         return ApiDataResponse.<FoodDetailResponseDto>builder()
                 .status(true)

@@ -47,7 +47,7 @@ public class FoodImageService {
                     .imageUrl(imageUrl)
                     .build();
 
-           // food.getPhotoList().add(photo);
+            food.getImages().add(image);
             foodImageRepository.save(image);
         }
     }
