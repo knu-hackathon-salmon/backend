@@ -1,11 +1,16 @@
 package com.knu.salmon.api.domain.shop.dto;
 
 import com.knu.salmon.api.domain.food.entity.Food;
+import com.knu.salmon.api.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class MyFoodsResponseDto {
+
+    private String myStoreName;
+    private String myEmail;
+    private String myImageUrl;
     private Long id;
     private String title;
     private String storeName;
@@ -18,7 +23,10 @@ public class MyFoodsResponseDto {
     private Boolean trading;
 
     @Builder
-    public MyFoodsResponseDto(Long id, String title, String storeName, int price, int stock, double latitude, double longitude, String imageUrl,Boolean trading, String roadAddress) {
+    public MyFoodsResponseDto(String myStoreName, String myEmail, String myImageUrl,Long id, String title, String storeName, int price, int stock, double latitude, double longitude, String imageUrl,Boolean trading, String roadAddress) {
+        this.myStoreName = myStoreName;
+        this.myEmail = myEmail;
+        this.myImageUrl = myImageUrl;
         this.id = id;
         this.title = title;
         this.storeName = storeName;
@@ -32,8 +40,11 @@ public class MyFoodsResponseDto {
     }
 
 
-    public static MyFoodsResponseDto MyFoods(Food food){
+    public static MyFoodsResponseDto MyFoods(Member member, Food food){
         return MyFoodsResponseDto.builder()
+                .myStoreName(member.getShop().getShopName())
+                .myEmail(member.getEmail())
+                .myImageUrl(member.getShop().getPhotoUrl())
                 .id(food.getId())
                 .title(food.getTitle())
                 .storeName(food.getShop().getShopName())

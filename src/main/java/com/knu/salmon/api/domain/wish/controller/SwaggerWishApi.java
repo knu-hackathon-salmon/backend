@@ -24,14 +24,6 @@ public interface SwaggerWishApi {
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
 
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원 찜 리스트 조회 성공"),
-            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
-    })
-    @Operation(summary = "회원 찜 리스트 조회", description = "회원의 찜 리스트를 조회합니다")
-    ResponseEntity<ApiDataResponse<List<MyFoodWishResponseDto>>> getFoodWishList(
-            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
-
 
 
 }
