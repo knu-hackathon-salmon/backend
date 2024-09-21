@@ -30,20 +30,23 @@ public class MessageHandler {
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
 
-    @MessageMapping("/chat/{chatId}")
+    @MessageMapping("/chat/private/{chatId}")
     @Operation(summary = "채팅룸의 메세지 처리", description = "채팅룸의 메세지를 처리하는 로직")
     public void handleMessage(@DestinationVariable("chatId") Long chatId,
                                      @Payload MessagePayLoad messagePayLoad) {
 
+        log.info("message handler {} ", messagePayLoad.content());
         String senderEmail =jwtService.getEmail(messagePayLoad.Authorization());
 
+        log.info("message handler , Authorization {} ", messagePayLoad.Authorization());
         Member member = memberRepository.findByEmail(senderEmail).orElseThrow(()-> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
         Long senderId = member.getId();
 
         MessageDto messageDto = messageService.addMessage(chatId, senderId, messagePayLoad.content());
+        log.info("messageDto {} ", messageDto);
+
         sendMessage(chatId, messageDto);
     }
-
 
     private void sendMessage(Long chatId, MessageDto messageDto) {
         messagingTemplate.convertAndSend("/topic/chat/private/" + chatId, messageDto);

@@ -24,12 +24,13 @@ public class ChatController {
 
    private final ChatService chatService;
 
-    @PostMapping("/{foodId}")
+    @PostMapping("/{foodId}/customer/{customerId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiDataResponse> createChat(
             @PathVariable("foodId") Long foodId,
+            @PathVariable("customerId") Long customerId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ApiDataResponse apiDataResponse = chatService.createChat(foodId, principalDetails);
+        ApiDataResponse apiDataResponse = chatService.createChat(foodId, customerId, principalDetails);
         return ResponseEntity.status(apiDataResponse.getCode()).body(apiDataResponse);
     }
 }

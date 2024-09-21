@@ -41,16 +41,20 @@ public class ChatService {
     private final FoodRepository foodRepository;
     private final MessageService messageService;
     private final FoodImageRepository foodImageRepository;
-    public ApiDataResponse createChat(Long foodId, PrincipalDetails principalDetails) {
+    public ApiDataResponse createChat(Long foodId, Long customerId, PrincipalDetails principalDetails) {
 
         // Find food
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
 
+
         // Get customer (the person requesting the chat)
         Customer customer = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION)).getCustomer();
 
+        if(customer.getId() != customerId) {
+            throw new IllegalArgumentException("고객 ID가 일치하지 않습니다. 잘못된 요청입니다.");
+        }
         // Find shop
         Shop shop = shopRepository.findById(foodId)
                 .orElseThrow(() -> new ShopException(ShopErrorCode.NO_EXIST_SHOP_EXCEPTION));
