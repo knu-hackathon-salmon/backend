@@ -123,7 +123,6 @@ public class JwtService {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(14 * 24 * 60 * 60);
         cookie.setPath("/");
-        cookie.setDomain("localhost");
         cookie.setSecure(false);
         cookie.setHttpOnly(true);
 
