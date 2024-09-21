@@ -184,6 +184,8 @@ public class FoodService {
         return EARTH_RADIUS * c;
     }
 
+
+    @Transactional
     public ApiDataResponse<FoodDetailResponseDto> updateFood(UpdateFoodDto updateFoodDto, MultipartFile[] newImageList, PrincipalDetails principalDetails, Long foodId){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
@@ -195,7 +197,18 @@ public class FoodService {
             throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
         }
 
-        //////////////////////
+        food.getImages().clear();
+        foodImageRepository.deleteAllByFood(food);
+
+        foodImageRepository.deleteByFood(food);
+
+        log.info("삭제 하려는 food Id {}" + food.getId());
+
+        foodImageService.uploadToBoardImages(newImageList, food);
+
+        food.updateFood(updateFoodDto);
+
+        foodRepository.save(food);
 
         return ApiDataResponse.<FoodDetailResponseDto>builder()
                 .status(true)
@@ -205,6 +218,8 @@ public class FoodService {
                 .build();
     }
 
+
+    @Transactional
     public ApiBasicResponse deleteFood(PrincipalDetails principalDetails, Long foodId) {
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));

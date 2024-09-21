@@ -12,5 +12,7 @@ public interface FoodImageRepository extends JpaRepository<FoodImage, Long> {
 
     void deleteAllByFoodIn(List<Food> foods);
 
-    void deleteAllByFoodId(Long foodId);
+    void deleteAllByFood(Food food);
+
+    void deleteByFood(Food food);
 }
