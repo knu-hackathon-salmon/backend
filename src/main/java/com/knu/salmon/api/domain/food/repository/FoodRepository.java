@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.food.repository;
 
 import com.knu.salmon.api.domain.food.entity.Food;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,8 @@ public interface FoodRepository extends JpaRepository<Food, Long>{
 
     @Query("SELECT f FROM foods f JOIN FETCH f.shop")
     List<Food> findAllWithShop();
+
+    List<Food> findAllByShop(Shop shop);
 
     @Query("SELECT f FROM foods f JOIN f.shop s WHERE " +
             "s.latitude BETWEEN :swLat AND :neLat AND " +
@@ -30,5 +33,6 @@ public interface FoodRepository extends JpaRepository<Food, Long>{
                                @Param("neLng") double neLng,
                                @Param("swLat") double swLat,
                                @Param("swLng") double swLng);
+
 
 }
