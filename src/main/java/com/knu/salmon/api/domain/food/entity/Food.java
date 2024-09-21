@@ -89,6 +89,10 @@ public class Food extends BaseEntity {
         this.trading = updateFoodDto.getNewTrading();
     }
 
+    public void updateTrading(Boolean trading){
+        this.trading = trading;
+    }
+
 
 
 }

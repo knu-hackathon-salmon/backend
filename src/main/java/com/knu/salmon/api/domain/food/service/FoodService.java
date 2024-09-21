@@ -285,4 +285,50 @@ public class FoodService {
                 .data(responseDtos)
                 .build();
     }
+
+
+    @Transactional
+    public ApiBasicResponse completeTrading(PrincipalDetails principalDetails, Long foodId) {
+        Member member = memberRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
+
+        if(!food.getShop().getMember().equals(member)){
+            throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
+        }
+
+        // 판매완료로 상태를 변경한다.
+        food.updateTrading(false);
+
+        return ApiBasicResponse.builder()
+                .status(true)
+                .code(200)
+                .message("음식 판매 상태를 판매완료로 변경 성공")
+                .build();
+    }
+
+    @Transactional
+    public ApiBasicResponse restartTrading(PrincipalDetails principalDetails, Long foodId) {
+        Member member = memberRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
+
+        if(!food.getShop().getMember().equals(member)){
+            throw new MemberException(MemberErrorCode.NO_OWNER_EXCEPTION);
+        }
+
+        // 판매완료로 상태를 변경한다.
+        food.updateTrading(true);
+
+        return ApiBasicResponse.builder()
+                .status(true)
+                .code(200)
+                .message("음식 판매 상태를 판매중으로 변경 성공")
+                .build();
+    }
+
 }

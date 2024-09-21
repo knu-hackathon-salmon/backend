@@ -97,4 +97,23 @@ public class ApiFoodController implements SwaggerFoodApi{
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
+    @PostMapping("/trading/complete/{foodId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiBasicResponse> completeTrading (
+            @PathVariable("foodId") Long foodId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        ApiBasicResponse response = foodService.completeTrading(principalDetails, foodId);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @PostMapping("/trading/restart/{foodId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiBasicResponse> restartTrading (
+            @PathVariable("foodId") Long foodId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        ApiBasicResponse response = foodService.restartTrading(principalDetails, foodId);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+
 }
