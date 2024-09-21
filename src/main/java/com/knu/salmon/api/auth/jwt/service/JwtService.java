@@ -132,6 +132,9 @@ public class JwtService {
         }
 
         validateToken(refreshToken);
+
+        log.info("refreshToken : {}", refreshToken);
+
         Member member = memberRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new JwtTokenException(REFRESH_TOKEN_MISMATCH_EXCEPTION));
 
