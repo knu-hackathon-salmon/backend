@@ -103,6 +103,7 @@
 
 
 ### 구현 방식
+<img width="541" alt="스크린샷 2024-09-22 03 38 57" src="https://github.com/user-attachments/assets/ae8db1fb-7ce4-406f-9b58-4abbd9294ce6">
 
 • 프론트엔드 <br/>
 언어: TypeScript<br/>
