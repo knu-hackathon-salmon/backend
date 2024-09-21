@@ -81,12 +81,6 @@ public class FoodService {
 
         foodImageService.uploadToBoardImages(files, food);
 
-        List<String> list = food.getImages().stream().map(FoodImage::getImageUrl).toList();
-        for (String s : list) {
-
-            log.info("images urls: {}", s);
-        }
-
         return ApiDataResponse.<FoodDetailResponseDto>builder()
                 .status(true)
                 .code(200)
@@ -120,6 +114,14 @@ public class FoodService {
             LocalDateTime createdAt = food.getCreatedAt();
             String remainingTime = getTimeDifference(createdAt);
             double distance = calculateDistance(latitude, longitude, food.getShop().getLatitude(), food.getShop().getLongitude());
+
+            int number = (int) distance;
+            String numberStr = String.valueOf(number);
+            if (numberStr.length() < 2) {
+                distance = Double.parseDouble(numberStr + ".0");
+            } else {
+                distance = Double.parseDouble(numberStr.charAt(0) + "." + numberStr.charAt(1));
+            }
 
             Boolean wish = true;
 
