@@ -1,3 +1,10 @@
+custom:
+  protocol: http
+  client-host : localhost
+  server-host : localhost
+  client-port : 5173
+  server-port : 8080
+
 spring:
   security:
     oauth2:
@@ -26,7 +33,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true

@@ -6,7 +6,6 @@ import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.entity.type.Role;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.domain.member.service.AuthService;
-import com.knu.salmon.api.domain.member.service.MemberService;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
 import jakarta.servlet.ServletException;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +31,17 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtService jwtService;
     private final AuthService authService;
     private final MemberRepository memberRepository;
+
+    @Value("${custom.protocol}")
+    private String protocol;
+
+    @Value("${custom.client-host}")
+    private String clientHost;
+
+    @Value("${custom.client-port}")
+    private String port;
+
+    private final String clientBaseUrl = protocol + "://" + clientHost + ":" + port;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -52,10 +63,10 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         if(member.getRole() == Role.ROLE_NEW_USER){
             response.setStatus(HttpStatus.CREATED.value());
-            response.sendRedirect("http://localhost:3000/signUp");
+            response.sendRedirect(clientBaseUrl + "/signUp");
         } else{
             response.setStatus(HttpStatus.OK.value());
-            response.sendRedirect("http://localhost:3000/main");
+            response.sendRedirect(clientBaseUrl + "/main");
         }
 
         log.info("OAuth2 로그인에 성공하였습니다. 이메일 : {}",  oauth2User.getEmail());
