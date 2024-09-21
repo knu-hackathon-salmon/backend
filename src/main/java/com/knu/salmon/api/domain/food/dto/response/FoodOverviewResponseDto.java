@@ -20,7 +20,7 @@ public class FoodOverviewResponseDto {
     private Boolean wish;
 
     @Builder
-    public FoodOverviewResponseDto(Long foodId, String shopImageUrl, String shopName, String foodImageUrl, String title, int likesCount, String roadAddress, String remainingTime, double distance, int price){
+    public FoodOverviewResponseDto(Long foodId, String shopImageUrl, String shopName, String foodImageUrl, String title, int likesCount, String roadAddress, String remainingTime, double distance, int price, Boolean wish){
         this.foodId = foodId;
         this.shopImageUrl = shopImageUrl;
         this.shopName = shopName;
@@ -31,12 +31,13 @@ public class FoodOverviewResponseDto {
         this.remainingTime = remainingTime;
         this.distance = distance;
         this.price = price;
+        this.wish = wish;
     }
 
 
 
 
-    public static FoodOverviewResponseDto fromFood(Food food, String remainingTime, double distance) {
+    public static FoodOverviewResponseDto fromFood(Food food, String remainingTime, double distance, Boolean wish) {
         return FoodOverviewResponseDto.builder()
                 .foodId(food.getId())
                 .shopImageUrl(food.getShop().getPhotoUrl())
@@ -48,6 +49,7 @@ public class FoodOverviewResponseDto {
                 .distance(distance)
                 .likesCount(food.getLikesCount())
                 .price(food.getPrice())
+                .wish(wish)
                 .build();
     }
 

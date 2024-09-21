@@ -10,4 +10,6 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     List<Wish> findAllByCustomerId(Long customerId);
 
     Boolean existsByCustomerIdAndFoodId(Long customerId, Long foodId);
+
+    Wish findByCustomerIdAndFoodId(Long customerId, Long foodId);
 }

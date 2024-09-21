@@ -47,10 +47,12 @@ public class ApiFoodController implements SwaggerFoodApi{
     }
 
     @GetMapping("/main/overview")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>>> getFoodOverView(
-            @RequestBody FoodMyLocationRequestDto foodMyLocationRequestDto
+            @RequestBody FoodMyLocationRequestDto foodMyLocationRequestDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> response = foodService.getFoodOverview(foodMyLocationRequestDto);
+        ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> response = foodService.getFoodOverview(foodMyLocationRequestDto, principalDetails);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 

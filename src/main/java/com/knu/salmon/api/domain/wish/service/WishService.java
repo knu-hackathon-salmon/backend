@@ -40,30 +40,36 @@ public class WishService {
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
 
         // 중복된 찜이 있는지 확인
-        Boolean exists = wishRepository.existsByCustomerIdAndFoodId(member.getCustomer().getId(), foodId);
+        boolean exists = wishRepository.existsByCustomerIdAndFoodId(member.getCustomer().getId(), foodId);
 
         if (exists) {
+            // 찜이 되어 있으면 찜을 취소
+            Wish wish = wishRepository.findByCustomerIdAndFoodId(member.getCustomer().getId(), foodId);
+
+            wishRepository.delete(wish); // 찜 삭제
+
             return ApiBasicResponse.builder()
-                    .status(false)
-                    .code(400)
-                    .message("이미 이 음식을 찜하셨습니다.")
+                    .status(true)
+                    .code(200)
+                    .message("음식 찜 취소 성공")
+                    .build();
+        } else {
+            // 찜이 되어 있지 않으면 새로운 찜 추가
+            Wish wish = Wish.builder()
+                    .customer(member.getCustomer())
+                    .food(food)
+                    .build();
+
+            wishRepository.save(wish);
+
+            return ApiBasicResponse.builder()
+                    .status(true)
+                    .code(200)
+                    .message("음식 찜 성공")
                     .build();
         }
-
-        // 새로운 찜 생성
-        Wish wish = Wish.builder()
-                .customer(member.getCustomer())
-                .food(food)
-                .build();
-
-        wishRepository.save(wish);
-
-        return ApiBasicResponse.builder()
-                .status(true)
-                .code(200)
-                .message("음식 찜 성공")
-                .build();
     }
+
 
 
     @Transactional

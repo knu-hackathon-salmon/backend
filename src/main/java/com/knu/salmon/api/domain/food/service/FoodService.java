@@ -102,18 +102,23 @@ public class FoodService {
                 .build();
     }
 
-    public ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> getFoodOverview(FoodMyLocationRequestDto dto){
+    public ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> getFoodOverview(FoodMyLocationRequestDto dto, PrincipalDetails principalDetails){
         Map<String, List<FoodOverviewResponseDto>> map = new HashMap<>();
         List<Food> foodList = foodRepository.findAllWithShop();
         List<FoodOverviewResponseDto> dataList = new ArrayList<>();
+
+        // 현재 로그인된 사용자 정보 가져오기
+        Member member = memberRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
 
         for (Food food : foodList) {
             LocalDateTime createdAt = food.getCreatedAt();
             String remainingTime = getTimeDifference(createdAt);
             double distance = calculateDistance(dto.getLatitude(), dto.getLongitude(), food.getShop().getLatitude(), food.getShop().getLongitude());
-            //Boolean wish = wishRepository.existsByCustomerIdAndFoodId()
+            Boolean wish = wishRepository.existsByCustomerIdAndFoodId(member.getCustomer().getId(), food.getId());
 
-            dataList.add(FoodOverviewResponseDto.fromFood(food, remainingTime, distance));
+            dataList.add(FoodOverviewResponseDto.fromFood(food, remainingTime, distance, wish));
         }
 
         // 1. 최신 순으로 정렬
