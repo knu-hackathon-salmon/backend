@@ -93,5 +93,24 @@ public interface SwaggerFoodApi {
             @Parameter(description = "위치 정보 dto") FoodMapNearRequestDto foodMapNearRequestDto
     );
 
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "음식 판매완료로 상태 변경 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "음식 판매 완료로 상태 변경 로직", description = "음식을 판매 완료로 상태를 변경합니다.")
+    ResponseEntity<ApiBasicResponse> completeTrading(
+            @Parameter(description = "음식 아이디", required = true) Long foodId,
+            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "음식 판매중으로 상태 변경 성공!"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "음식 판매중으로 상태 변경 로직", description = "음식을 판매 중으로 상태를 변경합니다.")
+    ResponseEntity<ApiBasicResponse> restartTrading(
+            @Parameter(description = "음식 아이디", required = true) Long foodId,
+            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
 }
 
