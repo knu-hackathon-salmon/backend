@@ -11,15 +11,13 @@ import java.time.LocalDateTime;
 public class CreateFoodDto {
     private String title;
 
-    private String name;
+    private int stock;
 
-    private Long stock;
+    private String expiration;
 
-    private LocalDateTime expiration;
-
-    private Long price;
+    private int price;
 
     private String content;
 
-    private FoodCategory foodCategory;
+    // private FoodCategory foodCategory;
 }

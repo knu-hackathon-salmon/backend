@@ -1,20 +1,15 @@
 package com.knu.salmon.api.domain.member.entity;
 
-import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.customer.entity.Customer;
-import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.type.MemberType;
 import com.knu.salmon.api.domain.member.entity.type.Role;
-import com.knu.salmon.api.domain.seller.entity.Shop;
+import com.knu.salmon.api.domain.shop.entity.Shop;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name = "members")
 @Getter

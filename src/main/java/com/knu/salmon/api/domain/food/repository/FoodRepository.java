@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food, Long>{
 
+    @Query("SELECT f FROM foods f JOIN FETCH f.shop")
+    List<Food> findAllWithShop();
+
     @Query("SELECT f FROM foods f JOIN f.shop s WHERE " +
             "s.latitude BETWEEN :swLat AND :neLat AND " +
             "s.longitude BETWEEN :swLng AND :neLng " +

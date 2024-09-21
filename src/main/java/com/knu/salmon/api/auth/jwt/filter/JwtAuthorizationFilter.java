@@ -38,7 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // filter를 거치고 싶지 않은 path를 여기서 관리함
-        String[] excludePathLists = {"/favicon.ico", "/swagger-ui/index.html", "/api/jwt/access-token"};
+        String[] excludePathLists = {"/favicon.ico", "/swagger-ui/index.html", "/api/jwt/access-token", "/api/member/oauth2/temp"};
         String[] excludePathStartsWithLists = {"/login", "/oauth2", "/v3", "/swagger-ui", "/ws", "/api/oauth2","/api/food/detail", "/api/food/overview"};
 
         String path = request.getRequestURI();

@@ -2,6 +2,7 @@ package com.knu.salmon.api.domain.food.controller;
 
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
 import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
+import com.knu.salmon.api.domain.food.dto.request.FoodMyLocationRequestDto;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodDetailResponseDto;
 import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class ApiFoodController implements SwaggerFoodApi{
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> createFood(
             @RequestPart(value = "images", required = false) MultipartFile[] images,
-            @RequestPart(value = "foodDto") CreateFoodDto createFoodDto,
+            @RequestPart(value = "createFoodDto") CreateFoodDto createFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         ApiDataResponse<FoodDetailResponseDto> response = foodService.createFood(images, createFoodDto, principalDetails);
@@ -44,10 +46,12 @@ public class ApiFoodController implements SwaggerFoodApi{
         return ResponseEntity.status(foodDetail.getCode()).body(foodDetail);
     }
 
-    @GetMapping("/overview")
-    public ResponseEntity<ApiDataResponse<List<FoodOverviewResponseDto>>> getFoodOverView() {
-        ApiDataResponse<List<FoodOverviewResponseDto>> foodOverview = foodService.getFoodOverview();
-        return ResponseEntity.status(foodOverview.getCode()).body(foodOverview);
+    @GetMapping("/main/overview")
+    public ResponseEntity<ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>>> getFoodOverView(
+            @RequestBody FoodMyLocationRequestDto foodMyLocationRequestDto
+    ) {
+        ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> response = foodService.getFoodOverview(foodMyLocationRequestDto);
+        return ResponseEntity.status(response.getCode()).body(response);
     }
 
     @PutMapping("{foodId}")
@@ -55,7 +59,7 @@ public class ApiFoodController implements SwaggerFoodApi{
     public ResponseEntity<ApiDataResponse<FoodDetailResponseDto>> updateFood(
             @PathVariable("foodId") Long foodId,
             @RequestPart(value = "images", required = false) MultipartFile[] newImages,
-            @RequestPart(value = "foodDto") UpdateFoodDto updateFoodDto,
+            @RequestPart(value = "updateFoodDto") UpdateFoodDto updateFoodDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         ApiDataResponse<FoodDetailResponseDto> response = foodService.updateFood(updateFoodDto, newImages, principalDetails, foodId);

@@ -1,5 +1,6 @@
 package com.knu.salmon.api.global.error;
 
+import com.knu.salmon.api.global.error.custom.FoodException;
 import com.knu.salmon.api.global.error.custom.JwtTokenException;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.spec.response.ApiErrorResponse;
@@ -57,6 +58,12 @@ public class ExControllerAdvice {
     @ExceptionHandler(JwtTokenException.class)
     public ResponseEntity<ApiErrorResponse> handleNotValidTokenException(JwtTokenException e){
         ApiErrorResponse apiErrorResponse = buildErrorResponseWithCustomException(e.getJwtTokenErrorCode());
+        return buildResponseEntity(apiErrorResponse);
+    }
+
+    @ExceptionHandler(FoodException.class)
+    public ResponseEntity<ApiErrorResponse> handleFoodException(FoodException e){
+        ApiErrorResponse apiErrorResponse = buildErrorResponseWithCustomException(e.getFoodErrorCode());
         return buildResponseEntity(apiErrorResponse);
     }
 

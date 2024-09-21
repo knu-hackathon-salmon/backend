@@ -1,4 +1,4 @@
-package com.knu.salmon.api.domain.seller.entity;
+package com.knu.salmon.api.domain.shop.entity;
 
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.member.entity.Member;
@@ -17,9 +17,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +30,17 @@ public class Shop extends BaseEntity {
     @Column(name = "shop_id")
     private Long id;
 
+    private String photoUrl;
+
     private String shopName;
 
     private String shopDescription;
 
-    private LocalDateTime startTime;
+    private String businessHours;
 
-    private LocalDateTime endTime;
+    private String roadAddress;
+
+    private String detailAddress;
 
     private double latitude;
 
@@ -54,11 +56,13 @@ public class Shop extends BaseEntity {
     private List<Food> foodList = new ArrayList<>();
 
     @Builder
-    public Shop(String shopName, String shopDescription, LocalDateTime startTime, LocalDateTime endTime, double latitude, double longitude, String phoneNumber, Member member) {
+    public Shop(String photoUrl, String shopName, String shopDescription, String businessHours, String roadAddress, String detailAddress, double latitude, double longitude, String phoneNumber, Member member) {
+        this.photoUrl = photoUrl;
         this.shopName = shopName;
         this.shopDescription = shopDescription;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.businessHours = businessHours;
+        this.roadAddress = roadAddress;
+        this.detailAddress = detailAddress;
         this.latitude = latitude;
         this.longitude = longitude;
         this.phoneNumber = phoneNumber;
