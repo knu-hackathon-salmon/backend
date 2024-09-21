@@ -2,6 +2,7 @@ package com.knu.salmon.api.auth.jwt.controller;
 
 import com.knu.salmon.api.auth.jwt.service.JwtService;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,18 +23,10 @@ public class ApiJwtController {
     /**
      * 리프레시로 액세스 토큰 받아오기
      */
-    @GetMapping("/access-token")
+    @GetMapping("/reissue")
     public ResponseEntity<ApiBasicResponse> getAccessToken(
             @CookieValue(value = "Authorization-refresh") String refreshToken){
 
-        String accessToken = jwtService.getAccessTokenFromRefresh(refreshToken);
-
-        return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + accessToken)
-                .body(ApiBasicResponse.builder()
-                        .status(true)
-                        .code(HttpStatus.OK.value())
-                        .message("Access Token 재발급 성공")
-                        .build());
+        return jwtService.reissue(refreshToken);
     }
 }

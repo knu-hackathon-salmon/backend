@@ -60,14 +60,8 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
-        if(member.getMemberType() == null){
-            response.setStatus(HttpStatus.CREATED.value());
-            response.sendRedirect(clientBaseUrl + "/sign-up");
-        } else{
-            response.setStatus(HttpStatus.OK.value());
-            response.setHeader("type", member.getMemberType().name());
-            response.sendRedirect(clientBaseUrl + "/main");
-        }
+        response.setStatus(HttpStatus.OK.value());
+        response.sendRedirect(clientBaseUrl + "/reissue");
 
         log.info("OAuth2 로그인에 성공하였습니다. 이메일 : {}",  oauth2User.getEmail());
         log.info("OAuth2 로그인에 성공하였습니다. Refresh Token : {}",  refreshToken);

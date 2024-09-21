@@ -4,15 +4,19 @@ import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.global.error.custom.JwtTokenException;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
+import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -122,7 +126,7 @@ public class JwtService {
         return cookie;
     }
 
-    public String getAccessTokenFromRefresh(String refreshToken){
+    public ResponseEntity<ApiBasicResponse> reissue(String refreshToken){
         if(refreshToken == null){
             throw new MemberException(MemberErrorCode.NO_MATCHING_MEMBER_EXCEPTION);
         }
@@ -133,7 +137,26 @@ public class JwtService {
 
         String accessToken = createAccessToken(member.getEmail(), member.getRole().name());
 
-        return accessToken;
+        // 새로 가입하는 유저
+        if(member.getMemberType() == null){
+            return ResponseEntity.status(HttpStatusCode.valueOf(201))
+                    .header("Authorization", accessToken)
+                    .body(ApiBasicResponse.builder()
+                            .status(true)
+                            .code(201)
+                            .message("새로 가입하는 유저 입니다")
+                            .build());
+        }
+
+        // 기존 유저
+        return ResponseEntity.status(HttpStatusCode.valueOf(200))
+                .header("Authorization", accessToken)
+                .header("type", member.getMemberType().name())
+                .body(ApiBasicResponse.builder()
+                        .status(true)
+                        .code(200)
+                        .message("기존 유저 입니다")
+                        .build());
     }
 
     private static boolean isRefreshTokenExpired(ExpiredJwtException e) {
