@@ -118,11 +118,13 @@ public class JwtService {
                 .compact();
     }
 
+
     public Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(14 * 24 * 60 * 60);
         cookie.setPath("/");
-        cookie.setDomain("localhost");
+        cookie.setDomain("35.184.36.31"); // 서버 도메인으로 설정
+        cookie.setSecure(false);
         cookie.setHttpOnly(true);
 
         return cookie;
