@@ -21,6 +21,7 @@ import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
 import com.knu.salmon.api.global.error.errorcode.custom.ChatErrorCode;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MessageService {
     private final MessageRepository messageRepository;
     private final MemberRepository memberRepository;
@@ -95,8 +97,6 @@ public class MessageService {
     }
 
 
-
-
     public MessageDto addMessage(Long chatId, Long senderId, String content) {
         Chat chat = chatRepository.getById(chatId);
         Member member = memberRepository.getById(senderId);
@@ -109,6 +109,8 @@ public class MessageService {
 
         Message newMessage = messageRepository.save(message);
 
+        log.info("addMessage 함수의 content {}", content);
+
         return MessageDto.builder()
                 .messageId(message.getId())
                 .chatId(message.getId())
@@ -116,6 +118,7 @@ public class MessageService {
                 .content(newMessage.getContent())
                 .senderEmail(member.getEmail())
                 .build();
+
     }
 
 }

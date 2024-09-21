@@ -70,6 +70,7 @@ public class AuthService {
                 .nickname(customerSignUpRequest.getNickname())
                 .latitude(customerSignUpRequest.getLatitude())
                 .longitude(customerSignUpRequest.getLongitude())
+                .member(member)
                 .build();
 
         member.setMemberType(MemberType.CUSTOMER);

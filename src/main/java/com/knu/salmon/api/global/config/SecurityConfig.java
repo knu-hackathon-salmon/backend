@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/food/detail/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/food/overview")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/ws")).permitAll()
                                 .anyRequest().authenticated()
                         )
                         .oauth2Login((oauth2) -> oauth2
@@ -62,7 +63,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://35.184.36.31:5173", "ws://localhost:5173", "ws://35.184.36.31:5173"));
         config.setAllowedMethods(Arrays.asList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("*"));
