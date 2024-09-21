@@ -61,7 +61,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
         response.setStatus(HttpStatus.OK.value());
-        response.sendRedirect(clientBaseUrl + "/reissue");
+        response.sendRedirect("http://localhost:8080" + "/api/jwt/reissue");
 
         log.info("OAuth2 로그인에 성공하였습니다. 이메일 : {}",  oauth2User.getEmail());
         log.info("OAuth2 로그인에 성공하였습니다. Refresh Token : {}",  refreshToken);

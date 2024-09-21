@@ -23,7 +23,7 @@ public class ApiJwtController {
     /**
      * 리프레시로 액세스 토큰 받아오기
      */
-    @PostMapping("/reissue")
+    @GetMapping("/reissue")
     public ResponseEntity<ApiBasicResponse> getAccessToken(
             @CookieValue("Authorization-refresh") String refresh) {
         return jwtService.reissue(refresh);
