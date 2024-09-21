@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .httpBasic(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests((auth) -> auth
                                 .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/login/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/jwt/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/oauth2/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/v3/**")).permitAll()
@@ -65,6 +65,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://35.184.36.31:5173", "ws://localhost:5173", "ws://35.184.36.31:5173"));
+        config.addExposedHeader("Authorization");
         config.setAllowedMethods(Arrays.asList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("*"));
