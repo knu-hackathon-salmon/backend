@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.chat.controller;
 
 
+import com.knu.salmon.api.domain.chat.dto.ChatDto;
 import com.knu.salmon.api.domain.chat.service.ChatService;
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
