@@ -123,7 +123,7 @@ public class JwtService {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(14 * 24 * 60 * 60);
         cookie.setPath("/");
-        cookie.setDomain("35.184.36.31"); // 서버 도메인으로 설정
+        cookie.setDomain("localhost");
         cookie.setSecure(false);
         cookie.setHttpOnly(true);
 
