@@ -120,7 +120,7 @@ public class JwtService {
     public Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(14 * 24 * 60 * 60);
-        cookie.setPath("/reissue");
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
 
         return cookie;
