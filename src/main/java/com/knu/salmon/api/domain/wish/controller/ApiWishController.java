@@ -21,10 +21,10 @@ public class ApiWishController implements SwaggerWishApi{
 
     @PostMapping("{foodId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiBasicResponse> createFoodWish(
+    public ResponseEntity<ApiBasicResponse> pushFoodWish(
             @PathVariable("foodId") Long foodId,
             @AuthenticationPrincipal PrincipalDetails principalDetails){
-        ApiBasicResponse response = wishService.createFoodWish(principalDetails, foodId);
+        ApiBasicResponse response = wishService.pushFoodWish(principalDetails, foodId);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 

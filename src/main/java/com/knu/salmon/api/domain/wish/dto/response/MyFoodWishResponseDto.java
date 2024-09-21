@@ -17,9 +17,10 @@ public class MyFoodWishResponseDto {
     private double longitude;
     private String imageUrl;
     private Boolean wish;
+    private String roadAddress;
 
     @Builder
-    public MyFoodWishResponseDto(Long id, String title, String storeName,  int price, int stock, double latitude, double longitude, String imageUrl, Boolean wish) {
+    public MyFoodWishResponseDto(Long id, String title, String storeName, int price, int stock, double latitude, double longitude, String imageUrl, Boolean wish, String roadAddress) {
         this.id = id;
         this.title = title;
         this.storeName = storeName;
@@ -29,7 +30,10 @@ public class MyFoodWishResponseDto {
         this.longitude = longitude;
         this.imageUrl = imageUrl;
         this.wish = wish;
+        this.roadAddress = roadAddress;
     }
+
+
 
     public static MyFoodWishResponseDto wishFoods(Food food){
         return MyFoodWishResponseDto.builder()
@@ -42,6 +46,7 @@ public class MyFoodWishResponseDto {
                 .longitude(food.getLongitude())
                 .imageUrl(food.getImages().get(0).getImageUrl())
                 .wish(true)
+                .roadAddress(food.getShop().getRoadAddress())
                 .build();
     }
 }

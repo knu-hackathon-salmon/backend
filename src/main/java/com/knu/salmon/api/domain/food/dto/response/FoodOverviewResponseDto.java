@@ -34,9 +34,6 @@ public class FoodOverviewResponseDto {
         this.wish = wish;
     }
 
-
-
-
     public static FoodOverviewResponseDto fromFood(Food food, String remainingTime, double distance, Boolean wish) {
         return FoodOverviewResponseDto.builder()
                 .foodId(food.getId())

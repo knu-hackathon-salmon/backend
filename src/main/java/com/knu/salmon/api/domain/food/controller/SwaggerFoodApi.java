@@ -47,7 +47,8 @@ public interface SwaggerFoodApi {
     })
     @Operation(summary = "홈 화면에 음식 리스트 조회", description = "홈 화면에 음식 리스트를 조회합니다")
     ResponseEntity<ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>>> getFoodOverView(
-            @Parameter(description = "현재 내 위치 dto")FoodMyLocationRequestDto foodMyLocationRequestDto,
+            @Parameter(description = "현재 내 위치 latitude") double latitude,
+            @Parameter(description = "현재 내 위치 longitude") double longitude,
             @Parameter(description = "Bearer ey...") PrincipalDetails principalDetails
     );
 

@@ -41,10 +41,11 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Value("${custom.client-port}")
     private String port;
 
-    private final String clientBaseUrl = protocol + "://" + clientHost + ":" + port;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        String clientBaseUrl = protocol + "://" + clientHost + ":" + port;
+
         PrincipalDetails oauth2User = (PrincipalDetails) authentication.getPrincipal();
         Collection<? extends GrantedAuthority> authorities = oauth2User.getAuthorities();
 

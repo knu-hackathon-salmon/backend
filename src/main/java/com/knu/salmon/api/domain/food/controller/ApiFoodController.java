@@ -49,10 +49,11 @@ public class ApiFoodController implements SwaggerFoodApi{
     @GetMapping("/main/overview")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>>> getFoodOverView(
-            @RequestBody FoodMyLocationRequestDto foodMyLocationRequestDto,
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> response = foodService.getFoodOverview(foodMyLocationRequestDto, principalDetails);
+        ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> response = foodService.getFoodOverview(latitude, longitude, principalDetails);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 

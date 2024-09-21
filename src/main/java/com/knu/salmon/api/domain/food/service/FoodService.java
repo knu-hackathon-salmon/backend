@@ -14,6 +14,7 @@ import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.food.repository.FoodRepository;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.member.entity.type.MemberType;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.domain.shop.entity.Shop;
 import com.knu.salmon.api.domain.shop.repository.ShopRepository;
@@ -102,7 +103,7 @@ public class FoodService {
                 .build();
     }
 
-    public ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> getFoodOverview(FoodMyLocationRequestDto dto, PrincipalDetails principalDetails){
+    public ApiDataResponse<Map<String, List<FoodOverviewResponseDto>>> getFoodOverview(double latitude, double longitude, PrincipalDetails principalDetails){
         Map<String, List<FoodOverviewResponseDto>> map = new HashMap<>();
         List<Food> foodList = foodRepository.findAllWithShop();
         List<FoodOverviewResponseDto> dataList = new ArrayList<>();
@@ -111,12 +112,16 @@ public class FoodService {
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
-
         for (Food food : foodList) {
             LocalDateTime createdAt = food.getCreatedAt();
             String remainingTime = getTimeDifference(createdAt);
-            double distance = calculateDistance(dto.getLatitude(), dto.getLongitude(), food.getShop().getLatitude(), food.getShop().getLongitude());
-            Boolean wish = wishRepository.existsByCustomerIdAndFoodId(member.getCustomer().getId(), food.getId());
+            double distance = calculateDistance(latitude, longitude, food.getShop().getLatitude(), food.getShop().getLongitude());
+
+            Boolean wish = true;
+
+            if(member.getMemberType() == MemberType.CUSTOMER) {
+                wish = wishRepository.existsByCustomerIdAndFoodId(member.getCustomer().getId(), food.getId());
+            }
 
             dataList.add(FoodOverviewResponseDto.fromFood(food, remainingTime, distance, wish));
         }

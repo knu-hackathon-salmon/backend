@@ -1,11 +1,10 @@
 package com.knu.salmon.api.domain.wish.service;
 
-import com.knu.salmon.api.domain.food.dto.request.FoodMapNearRequestDto;
-import com.knu.salmon.api.domain.food.dto.response.FoodMapNearResponseDto;
 import com.knu.salmon.api.domain.food.entity.Food;
 import com.knu.salmon.api.domain.food.repository.FoodRepository;
 import com.knu.salmon.api.domain.member.entity.Member;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.member.entity.type.MemberType;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.domain.wish.dto.response.MyFoodWishResponseDto;
 import com.knu.salmon.api.domain.wish.entity.Wish;
@@ -17,6 +16,7 @@ import com.knu.salmon.api.global.error.errorcode.custom.FoodErrorCode;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +25,20 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class WishService {
     private final WishRepository wishRepository;
     private final MemberRepository memberRepository;
     private final FoodRepository foodRepository;
 
-    public ApiBasicResponse createFoodWish(PrincipalDetails principalDetails, Long foodId) {
+    public ApiBasicResponse pushFoodWish(PrincipalDetails principalDetails, Long foodId) {
         // 현재 로그인된 사용자 정보 가져오기
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
+        if(member.getMemberType() == MemberType.SHOP){
+            throw new MemberException(MemberErrorCode.CAN_NOT_PUSH_WISH_EXCEPTION);
+        }
         // 음식 정보 가져오기
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new FoodException(FoodErrorCode.NO_EXIST_FOOD_EXCEPTION));
@@ -70,14 +74,14 @@ public class WishService {
         }
     }
 
-
-
-    @Transactional
     public ApiDataResponse<List<MyFoodWishResponseDto>> getWishList(PrincipalDetails principalDetails) {
-
         // 현재 로그인된 사용자 정보 가져오기
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
+        if(member.getMemberType() == MemberType.SHOP){
+            throw new MemberException(MemberErrorCode.CAN_NOT_ROAD_ALL_WISH_EXCEPTION);
+        }
 
         List<Wish> wishes = wishRepository.findAllByCustomerId(member.getCustomer().getId());
 
@@ -94,6 +98,4 @@ public class WishService {
                 .data(responseDtoList)
                 .build();
     }
-
-
 }
