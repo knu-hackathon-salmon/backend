@@ -24,9 +24,7 @@ public class ApiJwtController {
      */
     @GetMapping("/reissue")
     public ResponseEntity<ApiBasicResponse> getAccessToken(
-            HttpServletRequest request
-            ){
-
-        return jwtService.reissue(request);
+            @CookieValue("Authorization-refresh") String refresh) {
+        return jwtService.reissue(refresh);
     }
 }
