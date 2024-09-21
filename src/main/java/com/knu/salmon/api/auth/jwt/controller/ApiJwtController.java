@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class ApiJwtController {
     /**
      * 리프레시로 액세스 토큰 받아오기
      */
-    @GetMapping("/reissue")
+    @PostMapping("/reissue")
     public ResponseEntity<ApiBasicResponse> getAccessToken(
             @CookieValue("Authorization-refresh") String refresh) {
         return jwtService.reissue(refresh);
