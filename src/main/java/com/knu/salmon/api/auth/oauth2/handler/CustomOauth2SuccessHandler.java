@@ -64,7 +64,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         if(member.getRole() == Role.ROLE_NEW_USER){
             response.setStatus(HttpStatus.CREATED.value());
-            response.sendRedirect(clientBaseUrl + "/signUp");
+            response.sendRedirect(clientBaseUrl + "/sign-up");
         } else{
             response.setStatus(HttpStatus.OK.value());
             response.setHeader("type", member.getMemberType().name());
