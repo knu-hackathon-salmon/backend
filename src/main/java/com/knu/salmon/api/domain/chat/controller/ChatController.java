@@ -33,4 +33,17 @@ public class ChatController {
         ApiDataResponse apiDataResponse = chatService.createChat(foodId, customerId, principalDetails);
         return ResponseEntity.status(apiDataResponse.getCode()).body(apiDataResponse);
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiDataResponse<List<ChatDto>>> getAllChatsByMember(
+            @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        ApiDataResponse<List<ChatDto>> allChatsByMember = chatService.getAllChatsByMember(principalDetails);
+
+        return ResponseEntity.status(allChatsByMember.getCode()).body(allChatsByMember);
+
+    }
+
+   
 }
