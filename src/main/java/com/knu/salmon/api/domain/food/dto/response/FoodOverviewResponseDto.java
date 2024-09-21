@@ -17,9 +17,10 @@ public class FoodOverviewResponseDto {
     private String remainingTime;
     private double distance;
     private int price;
+    private Boolean wish;
 
     @Builder
-    public FoodOverviewResponseDto(Long foodId, String shopImageUrl, String shopName, String foodImageUrl, String title, int likesCount, String roadAddress, String remainingTime, double distance, int price) {
+    public FoodOverviewResponseDto(Long foodId, String shopImageUrl, String shopName, String foodImageUrl, String title, int likesCount, String roadAddress, String remainingTime, double distance, int price){
         this.foodId = foodId;
         this.shopImageUrl = shopImageUrl;
         this.shopName = shopName;

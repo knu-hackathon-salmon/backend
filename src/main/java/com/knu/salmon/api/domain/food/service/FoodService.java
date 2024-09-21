@@ -17,6 +17,7 @@ import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.member.repository.MemberRepository;
 import com.knu.salmon.api.domain.shop.entity.Shop;
 import com.knu.salmon.api.domain.shop.repository.ShopRepository;
+import com.knu.salmon.api.domain.wish.repository.WishRepository;
 import com.knu.salmon.api.global.error.custom.FoodException;
 import com.knu.salmon.api.global.error.custom.MemberException;
 import com.knu.salmon.api.global.error.errorcode.MemberErrorCode;
@@ -49,6 +50,7 @@ public class FoodService {
     private final FoodImageService foodImageService;
     private final FoodImageRepository foodImageRepository;
     private final ShopRepository shopRepository;
+    private final WishRepository wishRepository;
 
     public ApiDataResponse<FoodDetailResponseDto> createFood(MultipartFile[] files, CreateFoodDto createFoodDto, PrincipalDetails principalDetails){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
@@ -109,6 +111,7 @@ public class FoodService {
             LocalDateTime createdAt = food.getCreatedAt();
             String remainingTime = getTimeDifference(createdAt);
             double distance = calculateDistance(dto.getLatitude(), dto.getLongitude(), food.getShop().getLatitude(), food.getShop().getLongitude());
+            //Boolean wish = wishRepository.existsByCustomerIdAndFoodId()
 
             dataList.add(FoodOverviewResponseDto.fromFood(food, remainingTime, distance));
         }

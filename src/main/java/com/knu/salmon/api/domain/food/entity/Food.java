@@ -4,6 +4,7 @@ import com.knu.salmon.api.domain.Image.entity.FoodImage;
 import com.knu.salmon.api.domain.chat.entity.Chat;
 import com.knu.salmon.api.domain.food.dto.request.UpdateFoodDto;
 import com.knu.salmon.api.domain.shop.entity.Shop;
+import com.knu.salmon.api.domain.wish.entity.Wish;
 import com.knu.salmon.api.global.spec.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -55,6 +56,9 @@ public class Food extends BaseEntity {
 
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
+    private List<Wish> wishes = new ArrayList<>();
 
     @Builder
     public Food(String title, int stock, String expiration, int price, String content, double latitude, double longitude, int likesCount, FoodCategory foodCategory, Shop shop, Boolean trading) {

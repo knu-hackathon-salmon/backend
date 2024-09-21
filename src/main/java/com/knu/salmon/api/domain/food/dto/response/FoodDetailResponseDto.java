@@ -25,9 +25,10 @@ public class FoodDetailResponseDto {
     private String expiration;
     private String content;
     private List<String> foodImages;
+    private Boolean trading;
 
     @Builder
-    public FoodDetailResponseDto(Long foodId, String shopImageUrl, String shopName, String title, int price, int likesCount, String roadAddress, String businessHours, String phoneNumber, int stock, String expiration, String content, List<String> foodImages) {
+    public FoodDetailResponseDto(Long foodId, String shopImageUrl, String shopName, String title, int price, int likesCount, String roadAddress, String businessHours, String phoneNumber, int stock, String expiration, String content, List<String> foodImages, Boolean trading) {
         this.foodId = foodId;
         this.shopImageUrl = shopImageUrl;
         this.shopName = shopName;
@@ -41,6 +42,7 @@ public class FoodDetailResponseDto {
         this.expiration = expiration;
         this.content = content;
         this.foodImages = foodImages;
+        this.trading = trading;
     }
 
     public static FoodDetailResponseDto fromFood(Food food, Shop shop){
@@ -58,6 +60,7 @@ public class FoodDetailResponseDto {
                 .expiration(food.getExpiration())
                 .content(food.getContent())
                 .foodImages(food.getImages().stream().map(FoodImage::getImageUrl).toList())
+                .trading(food.getTrading())
                 .build();
 
     }
