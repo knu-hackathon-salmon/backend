@@ -11,6 +11,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -126,19 +127,37 @@ public class JwtService {
         return cookie;
     }
 
-    public ResponseEntity<ApiBasicResponse> reissue(String refreshToken){
-        if(refreshToken == null){
+    public ResponseEntity<ApiBasicResponse> reissue(HttpServletRequest request){
+       /* if(refreshToken == null){
             throw new MemberException(MemberErrorCode.NO_MATCHING_MEMBER_EXCEPTION);
         }
 
         validateToken(refreshToken);
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            log.info("cookie name : {}", cookie.getName());
+            log.info("cookie value : {}", cookie.getValue());
+        }
 
         log.info("refreshToken : {}", refreshToken);
 
         Member member = memberRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new JwtTokenException(REFRESH_TOKEN_MISMATCH_EXCEPTION));
 
-        String accessToken = createAccessToken(member.getEmail(), member.getRole().name());
+        String accessToken = createAccessToken(member.getEmail(), member.getRole().name());*/
+
+        Member member = null;
+        String accessToken = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        for (Cookie cookie : cookies) {
+
+            log.info("cookie name : {}", cookie.getName());
+            log.info("cookie value : {}", cookie.getValue());
+
+        }
 
         // 새로 가입하는 유저
         if(member.getMemberType() == null){
