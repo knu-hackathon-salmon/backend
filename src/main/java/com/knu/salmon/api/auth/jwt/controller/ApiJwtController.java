@@ -26,7 +26,6 @@ public class ApiJwtController {
     public ResponseEntity<ApiBasicResponse> getAccessToken(
             @CookieValue(value = "Authorization-refresh") String refreshToken){
 
-        log.info("token : {}", refreshToken);
         String accessToken = jwtService.getAccessTokenFromRefresh(refreshToken);
 
         return ResponseEntity.ok()

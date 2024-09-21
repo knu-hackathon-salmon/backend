@@ -67,6 +67,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             response.sendRedirect(clientBaseUrl + "/signUp");
         } else{
             response.setStatus(HttpStatus.OK.value());
+            response.setHeader("type", member.getMemberType().name());
             response.sendRedirect(clientBaseUrl + "/main");
         }
 

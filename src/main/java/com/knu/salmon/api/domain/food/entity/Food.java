@@ -75,9 +75,6 @@ public class Food extends BaseEntity {
         this.trading = trading;
     }
 
-
-
-
     public void updateFood(UpdateFoodDto updateFoodDto)
     {
         this.title = updateFoodDto.getNewTitle();

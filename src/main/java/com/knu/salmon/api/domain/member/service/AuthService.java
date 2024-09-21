@@ -21,6 +21,7 @@ import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,7 +59,7 @@ public class AuthService {
                 .build();
     }
 
-    public ApiDataResponse<ShopSignUpRequest> shopSignUp(ShopSignUpRequest shopSignUpRequest, MultipartFile file, PrincipalDetails principalDetails){
+    public ResponseEntity<ApiDataResponse<ShopSignUpRequest>> shopSignUp(ShopSignUpRequest shopSignUpRequest, MultipartFile file, PrincipalDetails principalDetails){
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
@@ -85,15 +86,19 @@ public class AuthService {
                 .build();
         shopRepository.save(newShop);
 
-        return ApiDataResponse.<ShopSignUpRequest>builder()
+        ApiDataResponse<ShopSignUpRequest> response = ApiDataResponse.<ShopSignUpRequest>builder()
                 .status(true)
                 .code(200)
                 .message("상정 등록에 성공하였습니다!")
                 .data(shopSignUpRequest)
                 .build();
+
+        return ResponseEntity.status(response.getCode())
+                .header("type", member.getMemberType().name())
+                .body(response);
     }
 
-    public ApiDataResponse<CustomerSignUpRequest> customerSignUp(CustomerSignUpRequest customerSignUpRequest, MultipartFile file,  PrincipalDetails principalDetails) {
+    public ResponseEntity<ApiDataResponse<CustomerSignUpRequest>> customerSignUp(CustomerSignUpRequest customerSignUpRequest, MultipartFile file,  PrincipalDetails principalDetails) {
         Member member = memberRepository.findByEmail(principalDetails.getEmail())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
@@ -118,12 +123,16 @@ public class AuthService {
                 .build();
         customerRepository.save(customer);
 
-        return ApiDataResponse.<CustomerSignUpRequest>builder()
+        ApiDataResponse<CustomerSignUpRequest> response = ApiDataResponse.<CustomerSignUpRequest>builder()
                 .status(true)
                 .code(200)
                 .message("구매자 등록에 성공하였습니다!")
                 .data(customerSignUpRequest)
                 .build();
+
+       return ResponseEntity.status(response.getCode())
+                .header("type", member.getMemberType().name())
+                .body(response);
     }
 
     public Member oauth2SaveOrUpdate(String email, String provider) {
@@ -156,4 +165,10 @@ public class AuthService {
     }
 
 
+    public String getMyMemberType(PrincipalDetails principalDetails) {
+        Member member = memberRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
+
+        return member.getMemberType().name();
+    }
 }

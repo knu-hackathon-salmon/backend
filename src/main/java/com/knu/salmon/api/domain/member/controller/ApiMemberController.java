@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class ApiMemberController implements SwaggerMemberApi {
 
     private final AuthService authService;
     private final JwtService jwtService;
+
 
     @PostMapping("/oauth2/temp")
     public ResponseEntity<ApiBasicResponse> tempOauth2SignUp(
@@ -62,9 +64,7 @@ public class ApiMemberController implements SwaggerMemberApi {
             @RequestPart("uploadPhoto") MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiDataResponse<ShopSignUpRequest> response = authService.shopSignUp(shopSignUpRequest, file, principalDetails);
-
-        return ResponseEntity.status(response.getCode()).body(response);
+        return authService.shopSignUp(shopSignUpRequest, file, principalDetails);
     }
 
     @PostMapping("/customer/sign-up")
@@ -74,9 +74,7 @@ public class ApiMemberController implements SwaggerMemberApi {
             @RequestPart("uploadPhoto") MultipartFile file,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        ApiDataResponse<CustomerSignUpRequest> response = authService.customerSignUp(customerSignUpRequest, file, principalDetails);
-
-        return ResponseEntity.status(response.getCode()).body(response);
+        return authService.customerSignUp(customerSignUpRequest, file, principalDetails);
     }
 
 
