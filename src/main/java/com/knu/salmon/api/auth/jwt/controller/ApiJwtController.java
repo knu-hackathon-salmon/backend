@@ -2,10 +2,8 @@ package com.knu.salmon.api.auth.jwt.controller;
 
 import com.knu.salmon.api.auth.jwt.service.JwtService;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
