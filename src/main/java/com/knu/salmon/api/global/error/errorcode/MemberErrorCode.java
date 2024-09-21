@@ -16,7 +16,8 @@ public enum MemberErrorCode implements ErrorCodeProvider {
     NO_OWNER_EXCEPTION(HttpStatus.BAD_REQUEST, "해당 다이어리의 Owner가 아닙니다."),
     CAN_NOT_PUSH_WISH_EXCEPTION(HttpStatus.BAD_REQUEST, "업체는 좋아요를 누를 수 없습니다"),
     CAN_NOT_ROAD_ALL_WISH_EXCEPTION(HttpStatus.BAD_REQUEST, "업체는 내 찜 목록을 가져올 수 없습니다"),
-    CAN_NOT_ROAD_ALL_FOODS_EXCEPTION(HttpStatus.BAD_REQUEST, "손님은 음식 판매 목록을 가져올 수 없습니다");
+    CAN_NOT_ROAD_ALL_FOODS_EXCEPTION(HttpStatus.BAD_REQUEST, "손님은 음식 판매 목록을 가져올 수 없습니다"),
+    CAN_NOT_POST_FOOD_EXCEPTION(HttpStatus.BAD_REQUEST, "손님은 음식을 등록 할 수 없습니다");
 
 
     MemberErrorCode(HttpStatus httpStatus, String message) {

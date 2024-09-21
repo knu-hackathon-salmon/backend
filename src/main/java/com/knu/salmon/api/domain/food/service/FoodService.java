@@ -58,6 +58,10 @@ public class FoodService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
         Shop shop = shopRepository.findByMemberId(member.getId());
 
+        if(member.getMemberType() == MemberType.CUSTOMER){
+            throw new MemberException(MemberErrorCode.CAN_NOT_ROAD_ALL_FOODS_EXCEPTION);
+        }
+
         Food food = Food.builder()
                 .title(createFoodDto.getTitle())
                 .stock(createFoodDto.getStock())
