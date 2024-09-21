@@ -27,13 +27,4 @@ public class ApiWishController implements SwaggerWishApi{
         ApiBasicResponse response = wishService.pushFoodWish(principalDetails, foodId);
         return ResponseEntity.status(response.getCode()).body(response);
     }
-
-
-    @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiDataResponse<List<MyFoodWishResponseDto>>> getFoodWishList(
-            @AuthenticationPrincipal PrincipalDetails principalDetails){
-        ApiDataResponse<List<MyFoodWishResponseDto>> wishList = wishService.getWishList(principalDetails);
-        return ResponseEntity.status(wishList.getCode()).body(wishList);
-    }
 }
