@@ -138,19 +138,21 @@ public class AuthService {
     public Member oauth2SaveOrUpdate(String email, String provider) {
         Optional<Member> optionalExistingMember = memberRepository.findByEmail(email);
 
-        if (optionalExistingMember.isPresent()) {
-            Member existingMember = optionalExistingMember.get();
-            existingMember.setMemberRole(provider);
+        if(optionalExistingMember.isEmpty()){
+            Role role = Role.ROLE_GOOGLE_USER;
+            if(provider.equals("kakao")){
+                role = Role.ROLE_KAKAO_USER;
+            }
 
-            return memberRepository.save(existingMember);
-        } else {
             Member member = Member.builder()
                     .email(email)
-                    .role(Role.ROLE_NEW_USER)
+                    .role(role)
                     .build();
 
             return memberRepository.save(member);
         }
+
+        return memberRepository.save(optionalExistingMember.get());
     }
 
     public String saveRefresh(String email, String refreshToken) {

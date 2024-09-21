@@ -52,17 +52,15 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String email = oauth2User.getEmail();
         String role = authorities.iterator().next().getAuthority();
 
-        String accessToken = jwtService.createAccessToken(email, role);
         String refreshToken =  jwtService.createRefreshToken();
         String savedRefresh = authService.saveRefresh(email, refreshToken);
 
-        response.setHeader("Authorization", accessToken);
         response.addCookie(jwtService.createCookie("Authorization-refresh", refreshToken));
 
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
-        if(member.getRole() == Role.ROLE_NEW_USER){
+        if(member.getMemberType() == null){
             response.setStatus(HttpStatus.CREATED.value());
             response.sendRedirect(clientBaseUrl + "/sign-up");
         } else{
@@ -72,7 +70,6 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
 
         log.info("OAuth2 로그인에 성공하였습니다. 이메일 : {}",  oauth2User.getEmail());
-        log.info("OAuth2 로그인에 성공하였습니다. Access Token : {}",  accessToken);
         log.info("OAuth2 로그인에 성공하였습니다. Refresh Token : {}",  refreshToken);
     }
 }

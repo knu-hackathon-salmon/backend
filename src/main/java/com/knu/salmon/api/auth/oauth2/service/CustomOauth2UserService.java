@@ -30,11 +30,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
         Oauth2Response oauth2Response = getOauth2Response(registrationId, oAuth2User);
 
-        log.info("oauth2Reponse email : {}", oauth2Response.getEmail());
-        log.info("oauth2Reponse name : {}", oauth2Response.getName());
-        log.info("oauth2Reponse provider : {}", oauth2Response.getProvider());
-        log.info("oauth2Reponse providerId : {}", oauth2Response.getProviderId());
-
         Member member = authService.oauth2SaveOrUpdate(oauth2Response.getEmail(), oauth2Response.getProvider());
 
         PrincipalDetails principalDetails = new PrincipalDetails(member, oAuth2User.getAttributes());
