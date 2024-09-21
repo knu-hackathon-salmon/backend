@@ -15,7 +15,9 @@ public enum MemberErrorCode implements ErrorCodeProvider {
     ALREADY_JOIN_MEMBER_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 회원가입을 완료 한 회원입니다"),
     NO_OWNER_EXCEPTION(HttpStatus.BAD_REQUEST, "해당 다이어리의 Owner가 아닙니다."),
     CAN_NOT_PUSH_WISH_EXCEPTION(HttpStatus.BAD_REQUEST, "업체는 좋아요를 누를 수 없습니다"),
-    CAN_NOT_ROAD_ALL_WISH_EXCEPTION(HttpStatus.BAD_REQUEST, "업체는 내 찜 목록을 가져올 수 없습니다");
+    CAN_NOT_ROAD_ALL_WISH_EXCEPTION(HttpStatus.BAD_REQUEST, "업체는 내 찜 목록을 가져올 수 없습니다"),
+    CAN_NOT_ROAD_ALL_FOODS_EXCEPTION(HttpStatus.BAD_REQUEST, "손님은 음식 판매 목록을 가져올 수 없습니다");
+
 
     MemberErrorCode(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
