@@ -269,6 +269,8 @@ public class FoodService {
         double userLng = foodMapNearRequestDto.getUserLng();
 
         List<Food> foods = foodRepository.findFoodsInBoundsSortedByDistance(neLat, neLng, swLat, swLng, userLat, userLng);
+        log.info("foods 출력중 {}", foods.get(0).getTitle());
+
         List<FoodMapNearResponseDto> responseDtos = foods.stream().map(food -> FoodMapNearResponseDto.fromFood(food)).toList();
 
         return ApiDataResponse.<List<FoodMapNearResponseDto>>builder()
