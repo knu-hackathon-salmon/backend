@@ -1,6 +1,9 @@
 package com.knu.salmon.api.domain.my.controller;
 
+import com.knu.salmon.api.domain.member.dto.response.MyCustomerProfileResponseDto;
+import com.knu.salmon.api.domain.member.dto.response.MyShopProfileResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.member.service.MemberService;
 import com.knu.salmon.api.domain.shop.dto.MyFoodsResponseDto;
 import com.knu.salmon.api.domain.shop.service.ShopService;
 import com.knu.salmon.api.domain.wish.dto.response.MyFoodWishResponseDto;
@@ -22,6 +25,23 @@ import java.util.List;
 public class ApiMyController {
     private final WishService wishService;
     private final ShopService shopService;
+    private final MemberService memberService;
+
+    @GetMapping("/shop")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiDataResponse<MyShopProfileResponseDto>> getMyShopProfile(
+            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        ApiDataResponse<MyShopProfileResponseDto> response = memberService.getMyShopProfile(principalDetails);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    @GetMapping("/customer")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiDataResponse<MyCustomerProfileResponseDto>> getMyCustomerProfile(
+            @AuthenticationPrincipal PrincipalDetails principalDetails){
+        ApiDataResponse<MyCustomerProfileResponseDto> response = memberService.getMyCustomerProfile(principalDetails);
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
 
     @GetMapping("/wish-list")
     @PreAuthorize("isAuthenticated()")

@@ -1,5 +1,7 @@
 package com.knu.salmon.api.domain.my.controller;
 
+import com.knu.salmon.api.domain.member.dto.response.MyCustomerProfileResponseDto;
+import com.knu.salmon.api.domain.member.dto.response.MyShopProfileResponseDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.domain.shop.dto.MyFoodsResponseDto;
 import com.knu.salmon.api.domain.wish.dto.response.MyFoodWishResponseDto;
@@ -13,6 +15,24 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface SwaggerMyApi{
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "내 shop 정보 리스트 조회 성공"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "내 shop 정보 조회", description = "내 shop 정보조회합니다")
+    ResponseEntity<ApiDataResponse<MyShopProfileResponseDto>> getMyShopProfile(
+            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "내(customer) 정보 리스트 조회 성공"),
+            @ApiResponse(responseCode = "4XX", description = "요청 형식이 잘못되었습니다"),
+    })
+    @Operation(summary = "내(customer) 정보 조회", description = "내(customer) 정보조회합니다")
+    ResponseEntity<ApiDataResponse<MyCustomerProfileResponseDto>> getMyCustomerProfile(
+            @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails);
+
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 찜 리스트 조회 성공"),
@@ -31,6 +51,7 @@ public interface SwaggerMyApi{
     ResponseEntity<ApiDataResponse<List<MyFoodsResponseDto>>> getMyFoods(
             @Parameter(description = "사용자 정보", required = true) PrincipalDetails principalDetails
     );
+
 
 
 
