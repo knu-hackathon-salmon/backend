@@ -12,6 +12,7 @@ import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/food")
+@Slf4j
 public class ApiFoodController implements SwaggerFoodApi{
 
     private final FoodService foodService;
@@ -103,6 +105,7 @@ public class ApiFoodController implements SwaggerFoodApi{
     public ResponseEntity<ApiBasicResponse> completeTrading (
             @PathVariable("foodId") Long foodId,
             @AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("trading/complete test 중 email은 {}", principalDetails.getEmail());
         ApiBasicResponse response = foodService.completeTrading(principalDetails, foodId);
         return ResponseEntity.status(response.getCode()).body(response);
     }
