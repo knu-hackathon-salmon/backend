@@ -23,8 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 @Component
 @RequiredArgsConstructor
@@ -58,27 +60,46 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+
+        // 요청 헤더 출력
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            String headerValue = request.getHeader(headerName);
+            log.info("Header: {} = {}", headerName, headerValue);
+        }
+
+        // 요청 바디 출력 (InputStream으로 읽기)
+        StringBuilder body = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            body.append(line);
+        }
+        log.info("Request Body: {}", body.toString());
+
+        // Authorization 헤더 처리
         String authorizationHeader = request.getHeader("Authorization");
-        // Authorization 헤더가 없는 경우 처리
+
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new JwtTokenException(JwtTokenErrorCode.NO_EXIST_AUTHORIZATION_HEADER_EXCEPTION);
         }
 
-        String accesstoken = request.getHeader("Authorization").substring(7);
+        String accessToken = authorizationHeader.substring(7);
 
-        if (jwtService.validateToken(accesstoken)) {
-            //JWT 토큰을 파싱해서 member 정보를 가져옴
-            String email = jwtService.getEmail(accesstoken);
+        if (jwtService.validateToken(accessToken)) {
+            String email = jwtService.getEmail(accessToken);
             Member member = memberRepository.findByEmail(email)
                     .orElseThrow(() -> new MemberException(MemberErrorCode.No_EXIST_EMAIL_MEMBER_EXCEPTION));
 
-            // 해당 멤버를 authentication(인증) 해줌
+            // 인증 처리
             authentication(request, response, filterChain, member);
             return;
         }
 
         filterChain.doFilter(request, response);
     }
+
 
 
     /**
