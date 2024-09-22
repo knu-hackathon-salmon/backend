@@ -41,7 +41,7 @@ public class ShopService {
 
         // 각 Wish 객체에서 Food를 추출하여 MyFoodWishResponseDto로 변환
         List<MyFoodsResponseDto> responseDtoList = foods.stream()
-                .map(food->MyFoodsResponseDto.MyFoods(member, food))
+                .map(food->MyFoodsResponseDto.MyFoods(food))
                 .toList();
 
         // API 응답 생성
