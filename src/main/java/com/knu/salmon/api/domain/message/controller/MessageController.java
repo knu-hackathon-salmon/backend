@@ -1,6 +1,7 @@
 package com.knu.salmon.api.domain.message.controller;
 
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.message.dto.MessageDto;
 import com.knu.salmon.api.domain.message.service.MessageService;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/message")
@@ -20,10 +23,10 @@ public class MessageController {
     private final MessageService messageService;
     @PostMapping("/{chatId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiDataResponse> getMessages(
+    public ResponseEntity<ApiDataResponse<List<MessageDto>>> getMessages(
             @PathVariable("chatId") Long chatId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ApiDataResponse apiDataResponse = messageService.getMessages(chatId, principalDetails);
+        ApiDataResponse<List<MessageDto>> apiDataResponse = messageService.getMessages(chatId, principalDetails);
         return ResponseEntity.status(apiDataResponse.getCode()).body(apiDataResponse);
     }
 }
