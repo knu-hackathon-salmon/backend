@@ -5,6 +5,7 @@ import com.knu.salmon.api.domain.chat.dto.ChatDto;
 import com.knu.salmon.api.domain.chat.service.ChatService;
 import com.knu.salmon.api.domain.food.dto.request.CreateFoodDto;
 import com.knu.salmon.api.domain.member.entity.PrincipalDetails;
+import com.knu.salmon.api.domain.message.dto.MessageDto;
 import com.knu.salmon.api.global.spec.response.ApiBasicResponse;
 import com.knu.salmon.api.global.spec.response.ApiDataResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,11 +28,11 @@ public class ChatController {
 
     @PostMapping("/{foodId}/customer/{customerId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiDataResponse> createChat(
+    public ResponseEntity<ApiDataResponse<List<MessageDto>>> createChat(
             @PathVariable("foodId") Long foodId,
             @PathVariable("customerId") Long customerId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ApiDataResponse apiDataResponse = chatService.createChat(foodId, customerId, principalDetails);
+        ApiDataResponse<List<MessageDto>> apiDataResponse = chatService.createChat(foodId, customerId, principalDetails);
         return ResponseEntity.status(apiDataResponse.getCode()).body(apiDataResponse);
     }
 
