@@ -2,7 +2,9 @@ package com.knu.salmon.api.domain.member.dto.response;
 
 import com.knu.salmon.api.domain.member.entity.Member;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class MyShopProfileResponseDto {
     private String myName;
     private String myEmail;
