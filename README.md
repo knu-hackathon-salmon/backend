@@ -107,6 +107,7 @@ https://github.com/knu-hackathon-salmon/front-repo.git
 ### 구현 방식
 <img width="541" alt="스크린샷 2024-09-22 03 38 57" src="https://github.com/user-attachments/assets/ae8db1fb-7ce4-406f-9b58-4abbd9294ce6">
 
+Front-End Repository : [https://github.com/knu-hackathon-salmon/front-repo]
 
 ## 향후 개선 혹은 발전 방안
 현재 개발된 서비스에서 향후 개선되거나 발전될 수 있는 부분에 대한 설명
