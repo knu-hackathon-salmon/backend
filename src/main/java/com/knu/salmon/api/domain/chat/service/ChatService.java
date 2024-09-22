@@ -41,7 +41,7 @@ public class ChatService {
     private final FoodRepository foodRepository;
     private final MessageService messageService;
     private final FoodImageRepository foodImageRepository;
-    public ApiDataResponse createChat(Long foodId, Long customerId, PrincipalDetails principalDetails) {
+    public ApiDataResponse<List<MessageDto>> createChat(Long foodId, Long customerId, PrincipalDetails principalDetails) {
 
         // Find food
         Food food = foodRepository.findById(foodId)
@@ -68,7 +68,7 @@ public class ChatService {
             Chat chat = chatOptional.get();
             List<MessageDto> messages = messageService.getPreviousMessages(chat);
 
-            return ApiDataResponse.builder()
+            return ApiDataResponse.<List<MessageDto>>builder()
                     .status(true)
                     .code(200)
                     .message("이전 메시지 불러오기 성공!")
@@ -84,7 +84,7 @@ public class ChatService {
 
             chatRepository.save(newChat);
 
-            return ApiDataResponse.builder()
+            return ApiDataResponse.<List<MessageDto>>builder()
                     .status(true)
                     .code(200)
                     .message("새 채팅룸 생성 성공!")
